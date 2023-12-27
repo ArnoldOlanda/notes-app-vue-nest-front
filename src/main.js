@@ -1,9 +1,10 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
+
 import "./style.css";
 import App from "./App.vue";
 import router from "./router";
-import { addIcons, OhVueIcon } from "oh-vue-icons";
 import * as FaIcons from "oh-vue-icons/icons/fa";
 
 const Fa = Object.values({ ...FaIcons });
