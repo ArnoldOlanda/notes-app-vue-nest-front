@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { getNotesByCategoryWithCountService } from "../../services/notes.service";
 
 export const useNotesStore = defineStore("notes", () => {
     const notes = ref([]);
@@ -7,11 +8,25 @@ export const useNotesStore = defineStore("notes", () => {
     const selectedNote = ref(null);
     const isLoading = ref(false);
     const errorMessage = ref("");
+    const notesCategoriesWithCount = ref([]);
 
     const setNotes = (payload) => {
         notes.value = payload;
         filteredNotes.value = payload;
     };
+
+    const setNotesCategoriesWithCount = (payload) => {
+        notesCategoriesWithCount.value = payload;
+    };
+
+    const refreshNotesCount = async (id) => {
+        try {
+            const data = await getNotesByCategoryWithCountService(id);
+            notesCategoriesWithCount.value = data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const setSelectedNote = (note) => {
         selectedNote.value = note;
@@ -30,6 +45,7 @@ export const useNotesStore = defineStore("notes", () => {
     return {
         //State
         notes,
+        notesCategoriesWithCount,
         selectedNote,
         filteredNotes,
         isLoading,
@@ -37,6 +53,8 @@ export const useNotesStore = defineStore("notes", () => {
 
         //Actions
         setNotes,
+        setNotesCategoriesWithCount,
+        refreshNotesCount,
         setSelectedNote,
         filterNotes,
         queryNotes,

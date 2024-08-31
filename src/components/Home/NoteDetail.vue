@@ -189,6 +189,7 @@ const saveNote = async () => {
         });
         const notes = await getNotesService(authStore.authState.user.id);
         notesStore.setNotes(notesAdapter(notes));
+        notesStore.refreshNotesCount(authStore.authState.user.id);
     } catch (error) {
         swal({
             title: "Error",
@@ -218,6 +219,7 @@ const deleteNote = async () =>{
         selectedNote.value = null;
         const notes = await getNotesService(authStore.authState.user.id);
         notesStore.setNotes(notesAdapter(notes));
+        notesStore.refreshNotesCount(authStore.authState.user.id);
     } catch (error) {
         swal({
             title: "Error",
