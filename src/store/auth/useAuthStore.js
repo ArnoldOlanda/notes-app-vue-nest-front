@@ -1,5 +1,4 @@
 //@ts-check
-import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 
@@ -7,14 +6,9 @@ import { loginService } from "../../services/login.service";
 import { registerService } from "../../services/register.service";
 
 export const useAuthStore = defineStore("auth", () => {
-    const auth = ref("not-authenticated");
-    const user = ref({});
-    const token = ref("");
-    const isLoading = ref(false);
-    const errorMessage = ref("");
 
     const authState = useStorage("auth_state", {
-        auth: "authenticated",
+        auth: "not-authenticated",
         user: {},
         token: "",
         isLoading: false,
@@ -46,11 +40,10 @@ export const useAuthStore = defineStore("auth", () => {
         authState.value.token = "";
     };
 
-    const register = async (name = "", username = "", password = "") => {
+    const register = async ({ name = "", username = "", password = "" }) => {
         try {
             const data = await registerService(name, username, password);
-
-            alert("Register Successfully");
+            console.info(data);
         } catch (error) {
             console.log(error);
         }

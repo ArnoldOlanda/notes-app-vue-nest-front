@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const useNotesStore = defineStore("notes", () => {
     const notes = ref([]);
     const filteredNotes = ref([]);
-    const selectedNote = ref({});
+    const selectedNote = ref(null);
     const isLoading = ref(false);
     const errorMessage = ref("");
 

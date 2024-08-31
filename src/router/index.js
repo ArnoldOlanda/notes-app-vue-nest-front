@@ -18,10 +18,10 @@ const routes = [
         path: "/home",
         beforeEnter: (to, from) => {
             const store = useAuthStore();
-            if (store.authState.auth !== "authenticated") {
-                alert("Debes iniciar sesion");
-                return { name: "login" };
-            }
+            // if (store.authState.auth !== "authenticated") {
+            //     // alert("Debes iniciar sesion");
+            //     return { name: "login" };
+            // }
         },
         children: [
             { path: "", name: "home", component: Home },
