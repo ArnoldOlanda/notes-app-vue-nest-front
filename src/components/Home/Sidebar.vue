@@ -2,7 +2,7 @@
     <div class="container bg-blue-500 w-1/6 text-white">
         <div class="flex justify-between items-center p-6">
             <img
-                src="/prueba.jpg"
+                :src="authState.user.avatar"
                 alt="profile_photo"
                 class="w-10 h-10 rounded-full"
             />
@@ -31,16 +31,26 @@
             <menu-item label="COLORS" />
             <menu-item label="TRASH" icon-name="fa-regular-trash-alt" />
         </div>
+        <div>
+            <button class="btn" @click="logout">
+                <v-icon name="fa-sign-out-alt"/>
+                Logout
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from 'vue-router';
 import { useAuthStore, useNotesStore } from "../../store";
-import MenuItem from "./MenuItem.vue";
 import { getNotesByCategoryWithCountService } from "../../services/notes.service";
+import MenuItem from "./MenuItem.vue";
+import { confirm } from "../commom/customSwal";
+
 const store = useAuthStore();
+const router = useRouter();
 const notesStore = useNotesStore();
 const { notesCategoriesWithCount } = storeToRefs(notesStore);
 const { authState } = storeToRefs(store);
@@ -56,6 +66,20 @@ const getCategories = async () => {
     } catch (error) {
         console.error(error);
     }
+};
+
+const logout = async () => {
+    const {isConfirmed} = await confirm({
+        title: "Are you sure?",
+        text: "You want to logout?",
+        icon: "warning",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+    });
+
+    if(!isConfirmed) return; 
+    store.logout();
+    router.push({ name: "login" });
 };
 
 onMounted(() => {

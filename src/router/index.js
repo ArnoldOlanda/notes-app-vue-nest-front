@@ -5,6 +5,7 @@ import Profile from "../views/Profile.vue";
 import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import PageNotFound from "../views/404.vue";
+import { authGuard } from "../guards/auth.guard";
 
 const routes = [
     {
@@ -16,13 +17,8 @@ const routes = [
     },
     {
         path: "/home",
-        beforeEnter: (to, from) => {
-            const store = useAuthStore();
-            // if (store.authState.auth !== "authenticated") {
-            //     // alert("Debes iniciar sesion");
-            //     return { name: "login" };
-            // }
-        },
+        beforeEnter: authGuard,
+        meta: { requiresAuth: true },
         children: [
             { path: "", name: "home", component: Home },
             { path: "profile", name: "profile", component: Profile },

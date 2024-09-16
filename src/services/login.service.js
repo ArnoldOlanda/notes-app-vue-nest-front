@@ -1,29 +1,27 @@
 //@ts-check
 
+import { notesApi } from "../api";
 import { API_URL } from "../constants";
 
 /**
  *
- * @param {string} username Nombre de usuario
+ * @param {string} email Nombre de usuario
  * @param {string} password Password usuario
  * @returns El usuario logueado
  */
-export const loginService = async (username = "", password = "") => {
+export const loginService = async (email = "", password = "") => {
     try {
-        const response = await fetch(`${API_URL}/auth/sign-in`, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
+        const {data} = await notesApi.post(`${API_URL}/auth/sign-in`, {
+            email,
+            password,
         });
-        const data = await response.json();
         return data;
     } catch (error) {
-        throw error;
+        // console.log(error);
+        if(error.response) {
+            throw new Error(error.response.data.message);
+        }else{
+            throw new Error("Error de conexión");
+        }
     }
 };

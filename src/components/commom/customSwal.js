@@ -31,3 +31,22 @@ export const confirm = ({
     cancelButtonText: cancelButtonText,
   });
 };
+
+export const mixin = ({ 
+  title, 
+  icon = 'success', 
+  position = "top-end", 
+  timer = 3000 
+}) => {
+  Swal.mixin({
+    toast: true,
+    position,
+    showConfirmButton: false,
+    timer,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  }).fire({ icon: icon, title: title })
+}

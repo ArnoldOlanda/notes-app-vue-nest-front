@@ -2,8 +2,14 @@
     <router-view></router-view>
 </template>
 
-<script setup>
-import Input from "./components/Input.vue";
-</script>
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
-<style scoped></style>
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

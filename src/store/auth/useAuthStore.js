@@ -4,6 +4,7 @@ import { useStorage } from "@vueuse/core";
 
 import { loginService } from "../../services/login.service";
 import { registerService } from "../../services/register.service";
+import { swal } from "../../components/commom/customSwal";
 
 export const useAuthStore = defineStore("auth", () => {
 
@@ -15,24 +16,65 @@ export const useAuthStore = defineStore("auth", () => {
         errorMessage: "",
     });
 
-    const login = async (username = "", password = "") => {
-        // isLoading.value = true;
-        authState.value.isLoading = true;
+    const login = async (email = "", password = "") => {
         try {
-            const data = await loginService(username, password);
+            
+            authState.value.isLoading = true;
+            const data = await loginService(email, password);
             authState.value.isLoading = false;
 
-            if (data.status === 401) {
-                authState.value.errorMessage = data.response;
-            } else {
-                authState.value.auth = "authenticated";
-                authState.value.user = data.user;
-                authState.value.token = data.token;
-            }
+            authState.value.auth = "authenticated";
+            authState.value.user = data.user;
+            authState.value.token = data.token;
+
+        } catch (error) {            
+            authState.value.isLoading = false;
+            swal({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+            })
+        }
+    };
+
+    const register = async ({ name = "", email = "", password = "" }) => {
+        try {
+            authState.value.isLoading = true;
+            const data = await registerService(name, email, password);
+            authState.value.isLoading = false;
+
+            authState.value.auth = "authenticated";
+            authState.value.user = data.user;
+            authState.value.token = data.token;
+
+        } catch (error) {
+            console.log(error);
+            authState.value.isLoading = false;
+            swal({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+            })
+        }
+    };
+
+    const setAccesToken = (token) => {
+        authState.value.token = token
+    }
+
+    const clearAccesToken = () => {
+        authState.value.token = ""
+    }
+
+    const loginWithGoogle = (token, name) => {
+        try {
+            authState.value.auth = "authenticated";
+            authState.value.user = { name };
+            authState.value.token = token;
         } catch (error) {
             throw error;
         }
-    };
+    }
 
     const logout = () => {
         authState.value.auth = "not-authenticated";
@@ -40,26 +82,16 @@ export const useAuthStore = defineStore("auth", () => {
         authState.value.token = "";
     };
 
-    const register = async ({ name = "", username = "", password = "" }) => {
-        try {
-            const data = await registerService(name, username, password);
-            console.info(data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     return {
         //State
-        // auth,
-        // user,
-        // token,
-        // errorMessage,
         authState,
 
         //Actions
         login,
+        loginWithGoogle,
         logout,
         register,
+        setAccesToken,
+        clearAccesToken
     };
 });

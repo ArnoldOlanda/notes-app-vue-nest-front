@@ -1,24 +1,21 @@
+import { notesApi } from "../api";
 import { API_URL } from "../constants";
 
 //@ts-check
-export const registerService = async (name, username, password) => {
+export const registerService = async (name, email, password) => {
     try {
-        const response = await fetch(`${API_URL}/users`, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name,
-                username,
-                password,
-            }),
+        const { data } = await notesApi.post(`${API_URL}/auth/register`, {
+            name,
+            email,
+            password
         });
-        const data = await response.json();
-
+        
         return data;
     } catch (error) {
-        throw error;
+        if (error.response) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error("Error de conexión");
+        }
     }
 };

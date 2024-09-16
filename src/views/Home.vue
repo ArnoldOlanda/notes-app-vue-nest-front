@@ -16,7 +16,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthStore, useNotesStore } from "../store";
 import Sidebar from "../components/Home/Sidebar.vue";
 import NoteList from "../components/Home/NotesList.vue";
@@ -25,6 +25,7 @@ import { getNotesService } from "../services/notes.service";
 import { notesAdapter } from "../adapters/notes.adapter";
 
 const router = useRouter();
+const route = useRoute();
 const store = useAuthStore();
 const notesStore = useNotesStore();
 
@@ -42,6 +43,10 @@ const getNotes = async () => {
 };
 
 onMounted(() => {
+    const query = route.query;
+    if (query) {
+        router.replace({ name: route.name, query: null });
+    }
     getNotes();
 });
 </script>
