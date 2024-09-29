@@ -1,5 +1,5 @@
 <template>
-    <div class="container bg-blue-500 w-1/6 text-white">
+    <div class="container bg-primary w-1/6 text-white">
         <div class="flex justify-between items-center p-6">
             <img
                 :src="authState.user.avatar"

@@ -58,10 +58,10 @@ const handleClickRegiser = async() => {
         class="w-[100%] h-screen bg-[url('/bg_2.jfif')] bg-cover flex justify-center items-center"
     >
         <div
-            class="container w-[25%] min-w-[350px] w-max[600px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md 500 drop-shadow-xl h-[60%] rounded-lg p-4 flex gap-3 flex-col items-center justify-around text-info"
+            class="container w-[25%] min-w-[350px] w-max[600px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md 500 drop-shadow-xl h-[60%] rounded-lg p-4 flex gap-3 flex-col items-center justify-around text-primary"
         >
             <div class="mt-2">
-                <h3 class="text-xl mt-6 text-info">Welcome</h3>
+                <h3 class="text-xl mt-6 text-primary"><b>Welcome</b></h3>
                 <h4 class="text-gray-600">Create an account</h4>
             </div>
             <div class="flex flex-col w-full gap-5 pl-8 pr-8">
@@ -87,7 +87,7 @@ const handleClickRegiser = async() => {
                     :validate="v$.password"
                 />
                 <button
-                    class="btn btn-info text-white"
+                    class="btn btn-primary text-white"
                     @click="handleClickRegiser"
                 >
                     {{ authState.isLoading ? "Loading..." : "Register" }}
@@ -96,7 +96,7 @@ const handleClickRegiser = async() => {
             <span class="text-gray-800">
                 Already have a account?
                 <b>
-                    <router-link to="/auth/login" class="text-info">
+                    <router-link to="/auth/login" class="text-primary">
                         Login
                     </router-link>
                 </b>

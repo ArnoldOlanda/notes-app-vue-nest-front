@@ -64,7 +64,7 @@ const loginGoogle = async () => {
     class="w-[100%] h-screen bg-[url('/bg_2.jfif')] bg-cover flex justify-center items-center"
   >
     <div
-      class="container w-[25%] min-w-[350px] w-max[600px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl h-[60%] rounded-lg p-4 flex gap-3 flex-col items-center justify-around text-info"
+      class="container w-[25%] min-w-[350px] w-max[600px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl h-[70%] rounded-lg p-4 flex gap-3 flex-col items-center justify-around text-primary"
     >
       <div class="mt-2">
         <v-icon name="fa-brain" scale="4" />
@@ -73,25 +73,30 @@ const loginGoogle = async () => {
         <h4 class="text-gray-800 font-semibold">Login to your account</h4>
       </div>
       <div class="flex flex-col w-full gap-5 pl-10 pr-10">
-        <Input
-          placeholder="email"
-          v-model="form.email"
-          inputType="text"
-          label="Email"
-          :validate="v$.email"
-        />
-        <Input
-          placeholder="password"
-          v-model="form.password"
-          inputType="password"
-          label="Password"
-          :validate="v$.password"
-        />
+        <form   
+          id="login-form"
+          novalidate 
+          @submit.prevent.stop="handleClickLogin">
+          <Input
+            placeholder="email"
+            v-model="form.email"
+            inputType="text"
+            label="Email"
+            :validate="v$.email"
+          />
+          <Input
+            placeholder="password"
+            v-model="form.password"
+            inputType="password"
+            label="Password"
+            :validate="v$.password"
+          />
+        </form>
         <div class="">
-        <button class="btn btn-info text-white w-full" @click="handleClickLogin">
+        <button class="btn btn-primary text-white w-full" form="login-form">
           {{ authState.isLoading ? 'Loading...' : 'Login' }}
         </button>
-          <div class="mt-0"> or </div>
+          <div class="mt-0 text-gray-700"> or </div>
           <button
             class="btn btn-base w-full"
             @click="() => loginGoogle()"
@@ -104,7 +109,7 @@ const loginGoogle = async () => {
         <span class="text-gray-700">
           Don`t have a account?
           <b>
-            <router-link to="/auth/register" class="text-info">
+            <router-link to="/auth/register" class="text-primary">
               Register
             </router-link>
           </b>

@@ -3,7 +3,7 @@
         <div v-if="selectedNote" class="relative h-full">
             <div>
                 <div class="flex items-center mb-4">
-                    <select class="select select-bordered w-36" v-model="selectedCategory">
+                    <select class="select select-bordered w-36" v-model="form.category">
                         <option :value="category.id" v-for="category in categories" :key="category.id">
                             {{ category.name }}
                         </option>
@@ -34,7 +34,6 @@
                     <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
                         <button 
                             class="btn btn-circle btn-error btn-sm text-white"
-                            :disabled="!state.content"
                             @click="deleteNote"
                         >
                             <v-icon name="fa-trash-alt"/>
@@ -47,20 +46,20 @@
                         @click="handleClickEditTitle"
                         v-show="!isEditing"
                     >
-                        {{ selectedNote.title }}
+                        {{ form.title }}
                     </h3>
                     <input
                         v-show="isEditing"
                         ref="inputNoteTitleRef"
                         class="input input-bordered text-xl text-uppercase font-bold"
                         type="text"
-                        v-model="noteTitle"
+                        v-model="form.title"
                         @blur="isEditing = false"
                     />
                 </div>
             </div>
             <quill-editor
-                :value="selectedNote.description"
+                :value="form.description"
                 :options="state.editorOption"
                 :disabled="state.disabled"
                 @blur="onEditorBlur($event)"
@@ -71,11 +70,11 @@
             <div class="absolute right-0 bottom-0">
                 <button 
                     class="bg-blue-500 p-2 text-white rounded-md w-40 shadow-lg disabled:bg-blue-200 disabled:shadow-none"
-                    :disabled="!state.content"
+                    :disabled="!form.description"
                     @click="saveNote"
                 >
                     <v-icon name="fa-save" />
-                    Save note
+                    {{ currentMode === "edit" ? "Update" : "Save" }} note
                 </button>
             </div>
         </div>
@@ -96,18 +95,20 @@ import { quillEditor } from "vue3-quill";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
-import { deleteNoteService, getNotesService, postNoteService } from "../../services/notes.service";
+import { deleteNoteService, getNotesService, patchNoteService, postNoteService } from "../../services/notes.service";
 import { confirm, swal } from "../commom/customSwal";
 import { notesAdapter } from "../../adapters/notes.adapter";
 import { getCategoriesService } from "../../services/categories.service";
 
 import "vue3-quill/lib/vue3-quill.css";
 
+const notesStore = useNotesStore();
+const authStore = useAuthStore();
+const { selectedNote, currentMode } = storeToRefs(notesStore);
+
 const state = reactive({
-    content: "",
-    _content: "",
     editorOption: {
-        placeholder: "Write something...",
+        placeholder: "Write a note...",
         modules: {
             toolbar: "#toolbar",
             // toolbar: [
@@ -132,23 +133,22 @@ const state = reactive({
     disabled: false,
 });
 
+const form = reactive({
+    title: selectedNote.value?.title,
+    description: selectedNote.value?.description,
+    category: selectedNote.value?.category,
+});
+
 const isEditing = ref(false);
-
-const notesStore = useNotesStore();
-const authStore = useAuthStore();
-
 const inputNoteTitleRef = ref(null);
-const noteTitle = ref("");
 const categories = ref([]);
-const { selectedNote } = storeToRefs(notesStore);
-
-const selectedCategory = ref(selectedNote.value?.category);
 
 
 watch(selectedNote, (value) => {
     if(value){
-        selectedCategory.value = value.category;
-        noteTitle.value = value.title;
+        form.title = value.title;
+        form.description = value.description;
+        form.category = value.category;
     }
 });
 
@@ -157,8 +157,8 @@ onMounted(() => {
 });
 
 const onEditorChange = ({ quill, html, text }) => {
-    //console.log("editor change!", quill, html, text);
-    state.content = html;
+    // console.log("editor change!", {quill, html, text});
+    form.description = html;
 };
 
 const handleClickEditTitle = () => {
@@ -167,7 +167,7 @@ const handleClickEditTitle = () => {
 };
 
 const saveNote = async () => {
-    if(!selectedNote.value.title || !state.content) {
+    if(!form.title || !form.description || !form.category){
         swal({
             title: "Error",
             text: "Please fill all required fields",
@@ -176,27 +176,44 @@ const saveNote = async () => {
         return;
     }
     try { 
-        await postNoteService(authStore.authState.user.id,{
-            title: noteTitle.value,
-            description: state.content,
-            category: `${selectedCategory.value}`,
-            date: new Date().toISOString(),
-        });
-        swal({
-            title: "Success",
-            text: "Note saved successfully",
-            icon: "success",
-        });
+        if(currentMode.value === "edit"){
+            await patchNoteService({
+                id: selectedNote.value.id,
+                title: form.title,
+                description: form.description,
+                category: `${form.category}`,
+                date: selectedNote.value.date,
+            });
+            swal({
+                title: "Success",
+                text: "Note updated successfully",
+                icon: "success",
+            });
+        } else {
+            await postNoteService(authStore.authState.user.id,{
+                title: form.title,
+                description: form.description,
+                category: `${form.category}`,
+                date: new Date().toISOString(),
+            });
+            swal({
+                title: "Success",
+                text: "Note saved successfully",
+                icon: "success",
+            });
+        }
+        notesStore.setLoading(true);
         const notes = await getNotesService(authStore.authState.user.id);
         notesStore.setNotes(notesAdapter(notes));
         notesStore.refreshNotesCount(authStore.authState.user.id);
+        notesStore.setSelectedNote(null);
     } catch (error) {
+        console.log(error);
         swal({
             title: "Error",
-            text: "An error occurred while saving the note",
+            text: error.message,
             icon: "error",
         })
-        console.log(error);
     }
 }
 
@@ -210,6 +227,7 @@ const deleteNote = async () =>{
             cancelButtonText: "No, cancel",
         })
         if(!isConfirmed) return;
+        notesStore.setLoading(true);
         await deleteNoteService(selectedNote.value.id);
         swal({
             title: "Success",

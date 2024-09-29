@@ -24,7 +24,7 @@ const routes = [
             { path: "profile", name: "profile", component: Profile },
         ],
     },
-    { path: "/", redirect: "auth/login" },
+    { path: "/", redirect: "/home" },
     { path: "/:pathMatch(.*)*", name: "404", component: PageNotFound },
 ];
 

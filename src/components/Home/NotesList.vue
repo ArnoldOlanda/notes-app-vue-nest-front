@@ -27,7 +27,7 @@
                 </div>
                 <div class="ml-8 mr-8">
                     <button
-                        class="w-full h-10 bg-blue-500 text-white rounded"
+                        class="w-full btn btn-primary text-white rounded"
                         @click="handleClickAddNote"
                     >
                         <v-icon name="fa-plus" />
@@ -37,7 +37,10 @@
             </div>
         </div>
         <div class="overflow-auto h-4/6">
-            <NoteItem v-for="note in notes" :key="note.id" :note-data="note" />
+            <span v-if="isLoading">
+                Loading...
+            </span>
+            <NoteItem v-else v-for="note in notes" :key="note.id" :note-data="note" />
         </div>
     </div>
 </template>
@@ -47,11 +50,10 @@ import { storeToRefs } from "pinia";
 import { onMounted, ref, watch } from "vue";
 import { useNotesStore } from "../../store";
 import NoteItem from "./NoteItem.vue";
-import notesJson from "../../data/notes.json";
 
 const query = ref("");
 const notesStore = useNotesStore();
-const { filteredNotes: notes } = storeToRefs(notesStore);
+const { filteredNotes: notes, isLoading } = storeToRefs(notesStore);
 
 const handleClickAddNote = () => {
     notesStore.setSelectedNote({
@@ -59,6 +61,7 @@ const handleClickAddNote = () => {
         description: "",
         category: "1",
     });
+    notesStore.setCurrentMode("create");
 };
 
 watch(query, () => {

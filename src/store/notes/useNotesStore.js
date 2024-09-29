@@ -9,8 +9,13 @@ export const useNotesStore = defineStore("notes", () => {
     const isLoading = ref(false);
     const errorMessage = ref("");
     const notesCategoriesWithCount = ref([]);
+    const currentMode = ref("create"); // create | edit
 
+    const setLoading = (payload) => {
+        isLoading.value = payload;
+    }
     const setNotes = (payload) => {
+        isLoading.value = false;
         notes.value = payload;
         filteredNotes.value = payload;
     };
@@ -32,6 +37,10 @@ export const useNotesStore = defineStore("notes", () => {
         selectedNote.value = note;
     };
 
+    const setCurrentMode = (mode) => {
+        currentMode.value = mode;
+    }
+
     const filterNotes = (payload) => {
         filteredNotes.value = notes.value.filter((n) => n.category === payload);
     };
@@ -50,13 +59,16 @@ export const useNotesStore = defineStore("notes", () => {
         filteredNotes,
         isLoading,
         errorMessage,
+        currentMode,
 
         //Actions
         setNotes,
+        setLoading,
         setNotesCategoriesWithCount,
         refreshNotesCount,
         setSelectedNote,
         filterNotes,
         queryNotes,
+        setCurrentMode,
     };
 });

@@ -8,7 +8,7 @@
                 <div class="w-[15px] h-[15px] bg-red-500 rounded-full" />
                 <span class="text-sm text-gray-500">{{ note.category.name }}</span>
             </div>
-            <span class="text-sm text-gray-500">{{ note.date }}</span>
+            <span class="text-sm text-gray-500">{{ new Date(note.date).toLocaleDateString() }}</span>
         </div>
         <div class="flex flex-col items-start text-left">
             <span class="text-lg font-bold">{{ note.title }}</span>
@@ -38,6 +38,7 @@ const handleClickNote = () => {
         category: note.value.category.id,
     };
     notesStore.setSelectedNote(noteValue);
+    notesStore.setCurrentMode("edit");
 };
 </script>
 

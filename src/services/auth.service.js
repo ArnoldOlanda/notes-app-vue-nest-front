@@ -8,7 +8,7 @@ export const revalidateToken = async (token) => {
             const {data} = await notesApi.get("/auth/refresh-token",{
                 withCredentials: true,
             });
-            // console.log(data);
+            console.log('Revalidando token');
             return data;
         } else return { token };
     
