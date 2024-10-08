@@ -66,10 +66,10 @@ export const useAuthStore = defineStore("auth", () => {
         authState.value.token = ""
     }
 
-    const loginWithGoogle = (token, name) => {
+    const loginWithGoogle = (token, payload) => {
         try {
             authState.value.auth = "authenticated";
-            authState.value.user = { name };
+            authState.value.user = payload;
             authState.value.token = token;
         } catch (error) {
             throw error;

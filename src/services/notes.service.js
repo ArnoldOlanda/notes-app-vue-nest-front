@@ -1,9 +1,8 @@
 import { notesApi } from "../api";
 
-export const getNotesService = async (user = 1) => {
+export const getNotesService = (user = 1) => {
     try {
-        const { data } = await notesApi.get(`/notes/${user}`);
-        return data;
+        return notesApi.get(`/notes/${user}?active=1`);
     } catch (error) {
         if(error.response){
             throw new Error(error.response.data.message);
@@ -14,6 +13,17 @@ export const getNotesService = async (user = 1) => {
 export const getNotesByCategoryWithCountService = async (user = 1) => {
     try {
         const { data } = await notesApi.get(`/notes/category-count/${user}`);
+        return data;
+    } catch (error) {
+        if(error.response){
+            throw new Error(error.response.data.message);
+        } else throw new Error(error)
+    }
+}
+
+export const getNotesByTagWithCountService = async (user = 1) => {
+    try {
+        const { data } = await notesApi.get(`/notes/tag-count/${user}`);
         return data;
     } catch (error) {
         if(error.response){
@@ -34,8 +44,6 @@ export const postNoteService = async (user,note) => {
 }
 
 export const patchNoteService = async (note) => {
-    // return console.log(note);
-    
     const {id,...rest} = note
     try {
         const { data } = await notesApi.patch(`/notes/${id}`, rest);
@@ -48,9 +56,9 @@ export const patchNoteService = async (note) => {
     }
 }
 
-export const deleteNoteService = async (note) => {
+export const deleteNoteService = async (note, type="soft") => {
     try {
-        const { data } = await notesApi.delete(`/notes/${note}`);
+        const { data } = await notesApi.delete(`/notes/${note}/${type}`);
         return data;
     } catch (error) {
         if(error.response){

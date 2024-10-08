@@ -1,8 +1,9 @@
 <template>
-    <div class="collapse collapse-plus bg-transparent">
-        <input type="radio" name="accordion" checked="checked" />
-        <div class="collapse-title text-md font-medium text-left">
+    <div class="collapse bg-transparent">
+        <input type="checkbox" :checked="props.open"/>
+        <div class="collapse-title text-md font-medium flex justify-between">
             {{ props.label }}
+            <v-icon name="fa-plus" />
         </div>
         <div class="collapse-content px-0">
             <slot />
@@ -15,6 +16,10 @@ const props = defineProps({
     label: {
         type: String,
         required: true,
+    },
+    open:{
+        type: Boolean,
+        default: false,
     }
 });
 

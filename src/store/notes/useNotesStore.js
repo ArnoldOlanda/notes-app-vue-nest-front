@@ -1,14 +1,16 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { getNotesByCategoryWithCountService } from "../../services/notes.service";
+import { getNotesByCategoryWithCountService, getNotesByTagWithCountService } from "../../services/notes.service";
 
 export const useNotesStore = defineStore("notes", () => {
     const notes = ref([]);
+    const tags = ref([]);
     const filteredNotes = ref([]);
     const selectedNote = ref(null);
     const isLoading = ref(false);
     const errorMessage = ref("");
     const notesCategoriesWithCount = ref([]);
+    const notesTagsWithCount = ref([]);
     const currentMode = ref("create"); // create | edit
 
     const setLoading = (payload) => {
@@ -20,14 +22,29 @@ export const useNotesStore = defineStore("notes", () => {
         filteredNotes.value = payload;
     };
 
+    const setTags = (payload) => {
+        isLoading.value = false;
+        tags.value = payload;
+    }
+
     const setNotesCategoriesWithCount = (payload) => {
         notesCategoriesWithCount.value = payload;
     };
 
+    const setNotesTagsWithCount = (payload) => {
+        notesTagsWithCount.value = payload;
+    }
+
     const refreshNotesCount = async (id) => {
         try {
-            const data = await getNotesByCategoryWithCountService(id);
-            notesCategoriesWithCount.value = data;
+            const [notesCategoryCount, notesTagCount] = await Promise.allSettled([
+                getNotesByCategoryWithCountService(id), 
+                getNotesByTagWithCountService(id)
+            ]);
+            console.log(notesTagCount.value);
+            
+            notesCategoriesWithCount.value = notesCategoryCount.value;
+            notesTagsWithCount.value = notesTagCount.value;
         } catch (error) {
             console.log(error);
         }
@@ -54,7 +71,9 @@ export const useNotesStore = defineStore("notes", () => {
     return {
         //State
         notes,
+        tags,
         notesCategoriesWithCount,
+        notesTagsWithCount,
         selectedNote,
         filteredNotes,
         isLoading,
@@ -63,8 +82,10 @@ export const useNotesStore = defineStore("notes", () => {
 
         //Actions
         setNotes,
+        setTags,
         setLoading,
         setNotesCategoriesWithCount,
+        setNotesTagsWithCount,
         refreshNotesCount,
         setSelectedNote,
         filterNotes,

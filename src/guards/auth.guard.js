@@ -4,9 +4,14 @@ import { useAuthStore } from "../store";
 //@ts-check
 export const authGuard = async (to, from, next) => {
     const store = useAuthStore();
-    if(to.query.token && to.query.user){
-        const {token, user} = to.query;
-        store.loginWithGoogle(token, user);
+    if(to.query.token && to.query.email){
+        const {token, email, id, name, avatar} = to.query;
+        store.loginWithGoogle(token, {
+            id,
+            name,
+            email,
+            avatar
+        });
         next();
         return;
     }

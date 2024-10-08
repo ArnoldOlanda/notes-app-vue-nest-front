@@ -36,6 +36,7 @@ const handleClickNote = () => {
     const noteValue = {
         ...note.value,
         category: note.value.category.id,
+        tags: note.value.tags.map((tag) => ({ id: tag.id, name: tag.name })),
     };
     notesStore.setSelectedNote(noteValue);
     notesStore.setCurrentMode("edit");

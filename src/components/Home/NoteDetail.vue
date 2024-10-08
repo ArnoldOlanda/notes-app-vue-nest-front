@@ -12,7 +12,7 @@
                         id="toolbar"
                         class="flex gap-5 items-center text-gray-400 w-full h-10"
                     >
-                        <div class="w-[25px] h-[25px] ml-4 bg-lime-400 rounded-full" />
+                        <!-- <div class="w-[25px] h-[25px] ml-4 bg-lime-400 rounded-full" /> -->
                         
                         <div class="flex gap-2">
                             <button class="ql-bold"><v-icon name="fa-bold" /></button>
@@ -51,11 +51,33 @@
                     <input
                         v-show="isEditing"
                         ref="inputNoteTitleRef"
-                        class="input input-bordered text-xl text-uppercase font-bold"
+                        class="input text-2xl p-0 text-uppercase font-bold"
                         type="text"
                         v-model="form.title"
                         @blur="isEditing = false"
                     />
+                </div>
+            </div>
+            <div class="flex justify-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-sm m-1">
+                        <v-icon name="fa-tag"/> Tags
+                    </div>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                        <li v-for="tag in tags" :key="tag.id">
+                            <a @click="addTag(tag)">
+                                {{ tag.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex gap-2 items-center ms-4">
+                    <span v-for="tag in form.tags" class="relative text-gray-400 cursor-pointer flex gap-1 bg-gray-100 rounded-full p-1">
+                        # {{ tag.name }}
+                        <span class="bg-gray-100 hover:bg-gray-200 transition-all w-6 h-6 rounded-full flex justify-center items-center">
+                            <v-icon name="fa-times" @click="form.tags = form.tags.filter(t => t.id !== tag.id)" />
+                        </span>
+                    </span>
                 </div>
             </div>
             <quill-editor
@@ -89,7 +111,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor } from "vue3-quill";
 
@@ -104,7 +126,7 @@ import "vue3-quill/lib/vue3-quill.css";
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
-const { selectedNote, currentMode } = storeToRefs(notesStore);
+const { selectedNote, currentMode, tags } = storeToRefs(notesStore);
 
 const state = reactive({
     editorOption: {
@@ -137,18 +159,20 @@ const form = reactive({
     title: selectedNote.value?.title,
     description: selectedNote.value?.description,
     category: selectedNote.value?.category,
+    tags: selectedNote.value?.tags,
 });
 
 const isEditing = ref(false);
 const inputNoteTitleRef = ref(null);
 const categories = ref([]);
-
+const isInputTagOpen = ref(false);
 
 watch(selectedNote, (value) => {
     if(value){
         form.title = value.title;
         form.description = value.description;
         form.category = value.category;
+        form.tags = value.tags;
     }
 });
 
@@ -162,19 +186,24 @@ const onEditorChange = ({ quill, html, text }) => {
 };
 
 const handleClickEditTitle = () => {
-    isEditing.value = true;    
-    inputNoteTitleRef.value.focus();
+    isEditing.value = true; 
+    nextTick(() => {
+        inputNoteTitleRef.value.focus();
+    });
 };
 
 const saveNote = async () => {
-    if(!form.title || !form.description || !form.category){
+    if(!form.title || !form.description || !form.category || !form.tags.length){
         swal({
             title: "Error",
-            text: "Please fill all required fields",
+            text: "Please complete all required fields",
             icon: "error",
         });
         return;
     }
+    // console.log(form);
+    // return;
+    
     try { 
         if(currentMode.value === "edit"){
             await patchNoteService({
@@ -195,6 +224,7 @@ const saveNote = async () => {
                 description: form.description,
                 category: `${form.category}`,
                 date: new Date().toISOString(),
+                tags: form.tags.map(tag => tag.id),
             });
             swal({
                 title: "Success",
@@ -204,7 +234,7 @@ const saveNote = async () => {
         }
         notesStore.setLoading(true);
         const notes = await getNotesService(authStore.authState.user.id);
-        notesStore.setNotes(notesAdapter(notes));
+        notesStore.setNotes(notesAdapter(notes.data));
         notesStore.refreshNotesCount(authStore.authState.user.id);
         notesStore.setSelectedNote(null);
     } catch (error) {
@@ -257,9 +287,13 @@ const getCategories = async () =>{
     }
 }
 
-// setTimeout(() => {
-//     state.disabled = true;
-// }, 2000);
+const addTag = (tag) => {
+    if(form.tags.find(t => t.id === tag.id)) {
+        form.tags = form.tags.filter(t => t.id !== tag.id);
+        return;
+    };
+    form.tags.push(tag);
+};
 
 const onEditorBlur = (quill) => {
     //console.log("editor blur!", quill);
