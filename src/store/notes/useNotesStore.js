@@ -1,30 +1,30 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { getNotesByCategoryWithCountService, getNotesByTagWithCountService } from "../../services/notes.service";
+import { useAuthStore } from "../auth/useAuthStore";
+import { useCategoriesQuery } from "@/composables/useCategoriesQuery";
+import { useTagsQuery } from "@/composables/useTagsQuery";
+import { useNotesQuery } from "@/composables/useNotesQuery";
+import { useNotesCounts } from "@/composables/useNotesCounts";
 
 export const useNotesStore = defineStore("notes", () => {
-    const notes = ref([]);
-    const tags = ref([]);
-    const filteredNotes = ref([]);
+    const authStore = useAuthStore();
+    const userId = authStore.authState.user.id;
+
+    const { notes, filteredNotes, filters, notesLoading, getNotes } = useNotesQuery(userId);
+    const { tags } = useTagsQuery(userId);
+    const { categories } = useCategoriesQuery(userId);
+    const { 
+        notesCategoriesWithCount, 
+        notesTagsWithCount, 
+      } = useNotesCounts(userId);
+
     const selectedNote = ref(null);
     const isLoading = ref(false);
     const errorMessage = ref("");
-    const notesCategoriesWithCount = ref([]);
-    const notesTagsWithCount = ref([]);
     const currentMode = ref("create"); // create | edit
-
+       
     const setLoading = (payload) => {
         isLoading.value = payload;
-    }
-    const setNotes = (payload) => {
-        isLoading.value = false;
-        notes.value = payload;
-        filteredNotes.value = payload;
-    };
-
-    const setTags = (payload) => {
-        isLoading.value = false;
-        tags.value = payload;
     }
 
     const setNotesCategoriesWithCount = (payload) => {
@@ -33,21 +33,6 @@ export const useNotesStore = defineStore("notes", () => {
 
     const setNotesTagsWithCount = (payload) => {
         notesTagsWithCount.value = payload;
-    }
-
-    const refreshNotesCount = async (id) => {
-        try {
-            const [notesCategoryCount, notesTagCount] = await Promise.allSettled([
-                getNotesByCategoryWithCountService(id), 
-                getNotesByTagWithCountService(id)
-            ]);
-            console.log(notesTagCount.value);
-            
-            notesCategoriesWithCount.value = notesCategoryCount.value;
-            notesTagsWithCount.value = notesTagCount.value;
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     const setSelectedNote = (note) => {
@@ -71,9 +56,12 @@ export const useNotesStore = defineStore("notes", () => {
     return {
         //State
         notes,
+        notesLoading,
         tags,
+        categories,
         notesCategoriesWithCount,
         notesTagsWithCount,
+        filters,
         selectedNote,
         filteredNotes,
         isLoading,
@@ -81,12 +69,10 @@ export const useNotesStore = defineStore("notes", () => {
         currentMode,
 
         //Actions
-        setNotes,
-        setTags,
         setLoading,
+        getNotes,
         setNotesCategoriesWithCount,
         setNotesTagsWithCount,
-        refreshNotesCount,
         setSelectedNote,
         filterNotes,
         queryNotes,

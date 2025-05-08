@@ -24,7 +24,7 @@
         </div>
         <div v-if="validate" class="text-left">
             <div v-for="error in validate.$errors">
-                <span :key="error.$uid" class="text-red-500">
+                <span :key="error.$uid" class="text-red-500 text-xs">
                     {{ error.$message }}
                 </span>
             </div>

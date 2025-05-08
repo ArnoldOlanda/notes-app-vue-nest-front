@@ -123,10 +123,14 @@ import { notesAdapter } from "../../adapters/notes.adapter";
 import { getCategoriesService } from "../../services/categories.service";
 
 import "vue3-quill/lib/vue3-quill.css";
+import { useMutation } from "@vue/apollo-composable";
+import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
-const { selectedNote, currentMode, tags } = storeToRefs(notesStore);
+const { selectedNote, currentMode, tags, categories } = storeToRefs(notesStore);
+
+const { mutate: createNoteMutation, loading: createNoteLoading } = useMutation(CREATE_NOTE_MUTATION)
 
 const state = reactive({
     editorOption: {
@@ -164,7 +168,6 @@ const form = reactive({
 
 const isEditing = ref(false);
 const inputNoteTitleRef = ref(null);
-const categories = ref([]);
 const isInputTagOpen = ref(false);
 
 watch(selectedNote, (value) => {
@@ -176,12 +179,7 @@ watch(selectedNote, (value) => {
     }
 });
 
-onMounted(() => {
-    getCategories();
-});
-
 const onEditorChange = ({ quill, html, text }) => {
-    // console.log("editor change!", {quill, html, text});
     form.description = html;
 };
 
@@ -219,22 +217,27 @@ const saveNote = async () => {
                 icon: "success",
             });
         } else {
-            await postNoteService(authStore.authState.user.id,{
-                title: form.title,
-                description: form.description,
-                category: `${form.category}`,
-                date: new Date().toISOString(),
-                tags: form.tags.map(tag => tag.id),
-            });
-            swal({
-                title: "Success",
-                text: "Note saved successfully",
-                icon: "success",
-            });
+            const result = await createNoteMutation({
+                userId: authStore.authState.user.id,
+                createNoteInput: {
+                    title: form.title,
+                    description: form.description,
+                    date: new Date().toISOString().split('T')[0],
+                    categoryId: form.category,
+                    tagIds: form.tags.map(tag => tag.id)
+                }
+            })
+
+            if(result?.data?.createNote){
+                swal({
+                    title: "Success",
+                    text: "Note saved successfully",
+                    icon: "success",
+                });
+            }
         }
         notesStore.setLoading(true);
-        const notes = await getNotesService(authStore.authState.user.id);
-        notesStore.setNotes(notesAdapter(notes.data));
+        await notesStore.getNotes();
         notesStore.refreshNotesCount(authStore.authState.user.id);
         notesStore.setSelectedNote(null);
     } catch (error) {
@@ -274,15 +277,6 @@ const deleteNote = async () =>{
             text: "An error occurred while deleting the note",
             icon: "error",
         })
-        console.log(error);
-    }
-}
-
-const getCategories = async () =>{
-    try {
-        const data = await getCategoriesService();
-        categories.value = data;
-    } catch (error) {
         console.log(error);
     }
 }

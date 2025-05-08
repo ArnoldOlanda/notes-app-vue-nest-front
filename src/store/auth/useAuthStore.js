@@ -1,10 +1,11 @@
 //@ts-check
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
+import { useMutation } from "@vue/apollo-composable";
 
-import { loginService } from "../../services/login.service";
-import { registerService } from "../../services/register.service";
-import { swal } from "../../components/commom/customSwal";
+import { LOGIN_MUTATION } from "../../graphql/mutations/login.mutation";
+import { REGISTER_MUTATION } from "../../graphql/mutations/register.mutation";
+
 
 export const useAuthStore = defineStore("auth", () => {
 
@@ -12,50 +13,30 @@ export const useAuthStore = defineStore("auth", () => {
         auth: "not-authenticated",
         user: {},
         token: "",
-        isLoading: false,
         errorMessage: "",
     });
 
-    const login = async (email = "", password = "") => {
-        try {
-            
-            authState.value.isLoading = true;
-            const data = await loginService(email, password);
-            authState.value.isLoading = false;
-
+    const { mutate: loginMutation, loading: loginLoading } = useMutation(LOGIN_MUTATION);
+    const { mutate: registerMutation, loading: registerLoading } = useMutation(REGISTER_MUTATION);
+    
+    const login = async (email = '', password = '') => {
+        const result = await loginMutation({ email, password });
+        if(result?.data?.login){
+            const { token, user } = result.data.login;
             authState.value.auth = "authenticated";
-            authState.value.user = data.user;
-            authState.value.token = data.token;
-
-        } catch (error) {            
-            authState.value.isLoading = false;
-            swal({
-                title: "Error",
-                text: error.message,
-                icon: "error",
-            })
+            authState.value.user = user;
+            authState.value.token = token;
         }
-    };
+    }
 
     const register = async ({ name = "", email = "", password = "" }) => {
-        try {
-            authState.value.isLoading = true;
-            const data = await registerService(name, email, password);
-            authState.value.isLoading = false;
-
+        const result = await registerMutation({ data: { name, email, password } });
+        if (result?.data?.register) {
+            const { token, user } = result.data.register;
             authState.value.auth = "authenticated";
-            authState.value.user = data.user;
-            authState.value.token = data.token;
-
-        } catch (error) {
-            console.log(error);
-            authState.value.isLoading = false;
-            swal({
-                title: "Error",
-                text: error.message,
-                icon: "error",
-            })
-        }
+            authState.value.user = user;
+            authState.value.token = token;
+        }            
     };
 
     const setAccesToken = (token) => {
@@ -85,12 +66,13 @@ export const useAuthStore = defineStore("auth", () => {
     return {
         //State
         authState,
+        loginLoading,
 
         //Actions
         login,
         loginWithGoogle,
-        logout,
         register,
+        logout,
         setAccesToken,
         clearAccesToken
     };

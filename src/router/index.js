@@ -10,6 +10,7 @@ import { authGuard } from "../guards/auth.guard";
 const routes = [
     {
         path: "/auth",
+        component: ()=> import("../layouts/AuthLayout.vue"),
         children: [
             { path: "login", name: "login", component: Login },
             { path: "register", name: "register", component: Register },

@@ -9,40 +9,21 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useAuthStore, useNotesStore } from "../store";
 import Sidebar from "../components/Home/Sidebar.vue";
 import NoteList from "../components/Home/NotesList.vue";
 import NoteDetail from "../components/Home/NoteDetail.vue";
-import { getNotesService } from "../services/notes.service";
-import { notesAdapter } from "../adapters/notes.adapter";
-import { getTagsService } from "../services/tags.service";
+
 
 const router = useRouter();
 const route = useRoute();
-const store = useAuthStore();
-const notesStore = useNotesStore();
-
-const getNotes = async () => {
-
-    const [notes, tags] = await Promise.allSettled([
-        getNotesService(store.authState.user.id),
-        getTagsService(store.authState.user.id)
-    ])
-    
-    const tagsTransformed = tags.value.data.map(tag=>({ id: tag.id, name: tag.name }));
-
-    notesStore.setNotes(notesAdapter(notes.value.data));
-    notesStore.setTags(tagsTransformed);
-};
 
 onMounted(() => {
     const query = route.query;
     if (query) {
         router.replace({ name: route.name, query: null });
-    }
-    getNotes();
+    }        
 });
 </script>
 

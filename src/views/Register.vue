@@ -36,35 +36,37 @@ const rules = reactive({
 const v$= useVuelidate(rules, formData);
 
 const handleClickRegiser = async() => {
-    const isValid = await v$.value.$validate();
-    if (!isValid){
+    try {
+        const isValid = await v$.value.$validate();
+        if (!isValid) return;
+        
+        await register({ ...formData });
+        mixin({
+            title: "Account created successfully!",
+            icon: "success",
+        })
+        authState.value.auth === 'authenticated' && router.push({ name: "home" });  
+    } catch (error) {
         swal({
             title: "Error",
-            text: "Please fill all required fields",
+            text: error.message,
             icon: "error",
-        });
-        return;
+        })
     }
-    await register({ ...formData });
-    await mixin({
-        title: "Account created successfully",
-        icon: "success",
-    })
-    authState.value.auth === 'authenticated' && router.push({ name: "home" });  
 };
 </script>
 <template>
     <div
-        class="w-[100%] h-screen bg-[url('/bg_2.jfif')] bg-cover flex justify-center items-center"
+        class="w-[100%] h-screen flex justify-center items-center"
     >
         <div
-            class="container w-[25%] min-w-[350px] w-max[600px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md 500 drop-shadow-xl h-[60%] rounded-lg p-4 flex gap-3 flex-col items-center justify-around text-primary"
+            class="container w-[90%] md:w-[350px] border-2 bg-white bg-opacity-60 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-primary"
         >
             <div class="mt-2">
                 <h3 class="text-xl mt-6 text-primary"><b>Welcome</b></h3>
                 <h4 class="text-gray-600">Create an account</h4>
             </div>
-            <div class="flex flex-col w-full gap-5 pl-8 pr-8">
+            <div class="flex flex-col w-full gap-5 px-4">
                 <Input
                     placeholder="name"
                     inputType="text"
@@ -93,7 +95,7 @@ const handleClickRegiser = async() => {
                     {{ authState.isLoading ? "Loading..." : "Register" }}
                 </button>
             </div>
-            <span class="text-gray-800">
+            <span class="text-gray-800 inline-block mb-4">
                 Already have a account?
                 <b>
                     <router-link to="/auth/login" class="text-primary">

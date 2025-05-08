@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 w-1/4 h-full">
+    <div class="bg-gray-100 w-2/6 lg:w-1/4 h-full">
         <div class="h-2/6">
             <div class="flex w-full justify-between items-center px-8 pt-6">
                 <span class="text-2xl font-bold">General</span>
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="overflow-auto h-4/6">
-            <span v-if="isLoading">
+            <span v-if="notesLoading">
                 Loading...
             </span>
             <NoteItem v-else v-for="note in notes" :key="note.id" :note-data="note" />
@@ -53,13 +53,14 @@ import NoteItem from "./NoteItem.vue";
 
 const query = ref("");
 const notesStore = useNotesStore();
-const { filteredNotes: notes, isLoading } = storeToRefs(notesStore);
+const { filteredNotes: notes, notesLoading } = storeToRefs(notesStore);
 
 const handleClickAddNote = () => {
     notesStore.setSelectedNote({
         title: "Nueva nota",
         description: "",
         category: "1",
+        tags: [],
     });
     notesStore.setCurrentMode("create");
 };

@@ -12,4 +12,9 @@ export default defineConfig({
         exclude: ["oh-vue-icons/icons"],
         include: ["quill"],
     },
+    resolve: {
+        alias: {
+            '@': '/src',
+        },
+    },
 });

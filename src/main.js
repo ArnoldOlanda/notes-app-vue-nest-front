@@ -1,21 +1,28 @@
-import { createApp } from "vue";
+import { createApp, h, provide } from "vue";
 import { createPinia } from "pinia";
+import Swal from "sweetalert2";
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import * as FaIcons from "oh-vue-icons/icons/fa";
 import GoogleSignInPlugin from "vue3-google-signin"
+import { DefaultApolloClient } from "@vue/apollo-composable";
 
-import "./style.css";
-import App from "./App.vue";
+import { pinia } from "./store";
 import router from "./router";
+import apolloClient from "./graphql";
+import App from "./App.vue";
+
+import 'sweetalert2/dist/sweetalert2.min.css';
+import "./style.css";
 
 const Fa = Object.values({ ...FaIcons });
 addIcons(...Fa);
-const pinia = createPinia();
+
 const app = createApp(App);
 
+app.provide(DefaultApolloClient,apolloClient);
+
 //Sweetalert
-import Swal from "sweetalert2";
-import 'sweetalert2/dist/sweetalert2.min.css';
+
 window.Swal = Swal;
 
 
