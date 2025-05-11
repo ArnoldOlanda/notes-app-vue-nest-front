@@ -73,8 +73,6 @@ const notesStore = useNotesStore();
 const { notesCategoriesWithCount, notesTagsWithCount, filters } = storeToRefs(notesStore);
 const { authState } = storeToRefs(store);
 
-const categorySelectedId = ref(1);
-const tagSelectedId = ref(1);
 
 const logout = async () => {
     const {isConfirmed} = await confirm({

@@ -111,26 +111,27 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, reactive, ref, watch } from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor } from "vue3-quill";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
-import { deleteNoteService, getNotesService, patchNoteService, postNoteService } from "../../services/notes.service";
+import { deleteNoteService, getNotesService } from "../../services/notes.service";
 import { confirm, swal } from "../commom/customSwal";
 import { notesAdapter } from "../../adapters/notes.adapter";
-import { getCategoriesService } from "../../services/categories.service";
 
 import "vue3-quill/lib/vue3-quill.css";
 import { useMutation } from "@vue/apollo-composable";
 import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
+import { UPDATE_NOTE_MUTATION } from "../../graphql/mutations/updateNote.mutation";
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
 const { selectedNote, currentMode, tags, categories } = storeToRefs(notesStore);
 
 const { mutate: createNoteMutation, loading: createNoteLoading } = useMutation(CREATE_NOTE_MUTATION)
+const { mutate: updateNoteMutation, loading: updateNoteLoading } = useMutation(UPDATE_NOTE_MUTATION)
 
 const state = reactive({
     editorOption: {
@@ -204,18 +205,24 @@ const saveNote = async () => {
     
     try { 
         if(currentMode.value === "edit"){
-            await patchNoteService({
-                id: selectedNote.value.id,
-                title: form.title,
-                description: form.description,
-                category: `${form.category}`,
-                date: selectedNote.value.date,
+            const result = await updateNoteMutation({
+                noteId: selectedNote.value.id,
+                updateNoteInput: {
+                    title: form.title,
+                    description: form.description,
+                    categoryId: form.category,
+                    tagIds: form.tags.map(tag => tag.id),
+                    date: selectedNote.value.date,
+                }
             });
-            swal({
-                title: "Success",
-                text: "Note updated successfully",
-                icon: "success",
-            });
+
+            if(result?.data?.updateNote){
+                swal({
+                    title: "Success",
+                    text: "Note updated successfully",
+                    icon: "success",
+                });
+            }
         } else {
             const result = await createNoteMutation({
                 userId: authStore.authState.user.id,
@@ -237,9 +244,12 @@ const saveNote = async () => {
             }
         }
         notesStore.setLoading(true);
-        await notesStore.getNotes();
-        notesStore.refreshNotesCount(authStore.authState.user.id);
+        await Promise.all([
+            notesStore.getNotes(),
+            notesStore.refetchNotesCounts()
+        ])
         notesStore.setSelectedNote(null);
+
     } catch (error) {
         console.log(error);
         swal({

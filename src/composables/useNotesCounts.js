@@ -3,10 +3,7 @@ import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
 export function useNotesCounts(userId) {
-    // const notesCategoriesWithCount = ref([]);
-    // const notesTagsWithCount = ref([]);
-
-    const {result, loading, error} = useQuery(gql`
+    const {result, loading, error, refetch} = useQuery(gql`
         query getNotesByCategoryWithCount($userId: Int!) {
             getNotesByCategoryWithCount(id: $userId) {
                 id
@@ -32,8 +29,15 @@ export function useNotesCounts(userId) {
         console.log("Query error:", error);
     });
 
+    const refetchNotesCounts = async () => {
+        const result = await refetch({userId});
+        console.log(result);
+    };
+
     return {
         notesCategoriesWithCount,
         notesTagsWithCount,
+        
+        refetchNotesCounts,
     };
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-gray-100 w-2/6 lg:w-1/4 h-full">
-        <div class="h-2/6">
+    <div class="flex flex-col bg-gray-100 w-2/6 lg:w-1/4 h-full">
+        <div class="my-2">
             <div class="flex w-full justify-between items-center px-8 pt-6">
                 <span class="text-2xl font-bold">General</span>
                 <v-icon name="fa-retweet" scale="1.5" fill="#cccccc" />
@@ -25,9 +25,9 @@
                     />
                     <v-icon name="fa-search" />
                 </div>
-                <div class="ml-8 mr-8">
+                <div class="mx-8">
                     <button
-                        class="w-full btn btn-primary text-white rounded"
+                        class="w-full btn btn-sm btn-primary text-white rounded"
                         @click="handleClickAddNote"
                     >
                         <v-icon name="fa-plus" />
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-auto h-4/6">
+        <div class="overflow-auto flex-1">
             <span v-if="notesLoading">
                 Loading...
             </span>

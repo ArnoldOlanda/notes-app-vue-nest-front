@@ -15,7 +15,8 @@ export const useNotesStore = defineStore("notes", () => {
     const { categories } = useCategoriesQuery(userId);
     const { 
         notesCategoriesWithCount, 
-        notesTagsWithCount, 
+        notesTagsWithCount,
+        refetchNotesCounts 
       } = useNotesCounts(userId);
 
     const selectedNote = ref(null);
@@ -71,6 +72,7 @@ export const useNotesStore = defineStore("notes", () => {
         //Actions
         setLoading,
         getNotes,
+        refetchNotesCounts,
         setNotesCategoriesWithCount,
         setNotesTagsWithCount,
         setSelectedNote,

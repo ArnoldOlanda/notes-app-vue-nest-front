@@ -1,12 +1,13 @@
-import { useAuthStore } from "../store";
-import apolloClient from "../graphql";
 import { gql } from "@apollo/client/core";
-import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { computed } from "vue";
+import apolloClient from "../graphql";
+import { useAuthStore } from "../store";
+import { mixin } from "../components/commom/customSwal";
 
 //@ts-check
 export const authGuard = async (to, from, next) => {
     const store = useAuthStore();
+    
+    // Handle Google OAuth callback
     if (to.query.token && to.query.email) {
         const { token, email, id, name, avatar } = to.query;
         store.loginWithGoogle(token, {
@@ -18,15 +19,17 @@ export const authGuard = async (to, from, next) => {
         next();
         return;
     }
-
-    if(from.name === "login" || from.name === "register"){
+    
+    // Check if route requires authentication
+    if (!to.meta.requiresAuth) {
         next();
         return;
     }
 
+    // If user has a token, verify it's still valid
     if (store.authState.token) {
         try {
-            // Usando provideApolloClient según la documentación oficial
+            // Refresh token to verify it's still valid
             const query = await apolloClient.query({
                 query: gql`
                     query RefreshToken {
@@ -34,7 +37,8 @@ export const authGuard = async (to, from, next) => {
                             token
                         }
                     }
-                `
+                `,
+                fetchPolicy: 'network-only' // Don't use cache for this query
             })
 
             const token = query.data?.refreshToken?.token;
@@ -47,12 +51,13 @@ export const authGuard = async (to, from, next) => {
                 return next({ name: "login" });
             }
         } catch (error) {
-            console.log(error);
-
-            if (error.response?.status === 401 || error.networkError?.statusCode === 401) {
-                store.logout();
-                return next({ name: "login" });
-            }
+            console.error(error.message);
+            mixin({
+                icon: 'error',
+                title: 'Error al establecer conexion con el servidor',
+            })
+            store.logout();
+            return next({ name: "login" });
         }
     } else {
         return next({ name: "login" });

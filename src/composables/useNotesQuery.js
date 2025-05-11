@@ -1,4 +1,3 @@
-//@ts-check
 import { reactive, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { GET_NOTES_BY_USER } from "../graphql/queries/getNotesByUser.query";
@@ -22,21 +21,51 @@ export function useNotesQuery(userId) {
     const getNotes = async () => {
         const result = await refetch({userId});
         console.log(result);
-        // if (result?.getNotesByUserId) {
-        //     filteredNotes.value = result.getNotesByUserId;
-        //     notes.value = notesAdapter(result.getNotesByUserId);
-        // }
     };
 
-    watch(filters, (newFilters) => {
-        console.log("Filters changed:", newFilters);
+    const applyFilters = () => {
+        if (!notes.value || !notes.value.length) {
+            filteredNotes.value = [];
+            return;
+        }
+
+        // Start with all notes
+        let result = [...notes.value];
+        
+        // Apply category filter if active
+        if (filters.category) {
+            result = result.filter((note) => {
+                return Boolean(note?.category?.id === filters.category);
+            });
+        }
+        
+        // Apply tag filter if active (on the already filtered results)
+        if (filters.tag) {
+            result = result.filter((note) => {
+                return Boolean(
+                    note?.tags && 
+                    Array.isArray(note.tags) && 
+                    note.tags.some((tag) => tag?.id === filters.tag)
+                );
+            });
+        }
+        
+        // Update filtered notes
+        filteredNotes.value = result;
+
+        console.log("Applied filters:", filters, "Results:", filteredNotes.value.length);
+    };
+
+    watch(filters, () => {        
+        applyFilters();
     });
 
     watch(notesQuery, (newValue) => {
         console.log("Notes query result:", newValue);
         if (newValue?.getNotesByUserId) {
-            filteredNotes.value = newValue.getNotesByUserId;
             notes.value = notesAdapter(newValue.getNotesByUserId);
+            // Apply filters to the new notes
+            applyFilters();
         }
     });
 

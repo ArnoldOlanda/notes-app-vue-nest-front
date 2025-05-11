@@ -3,16 +3,25 @@
         class="px-8 py-5 border-gray-200 border-y-[1px] cursor-pointer hover:bg-gray-200 transition-colors"
         @click="handleClickNote"
     >
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-[15px] h-[15px] bg-red-500 rounded-full" />
-                <span class="text-sm text-gray-500">{{ note.category.name }}</span>
+        <div class="flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <div class="text-[12px] text-neutral-400">{{ note.category.name }}</div>
+                <div class="text-[12px] text-neutral-400">{{ new Date(note.date).toLocaleDateString() }}</div>
             </div>
-            <span class="text-sm text-gray-500">{{ new Date(note.date).toLocaleDateString() }}</span>
+            <!-- Tags as chips -->
+            <div v-if="note.tags && note.tags.length" class="flex flex-wrap gap-1 mt-1">
+                <small 
+                    v-for="tag in note.tags" 
+                    :key="tag.id"
+                    class="px-2 py-0.5 text-[10px] bg-blue-100 text-gray-600 rounded-full border border-gray-200"
+                >
+                    {{ tag.name }}
+                </small>
+            </div>
         </div>
-        <div class="flex flex-col items-start text-left">
-            <span class="text-lg font-bold">{{ note.title }}</span>
-            <p class="text-sm text-gray-800" v-html="note.description">
+        <div class="flex flex-col items-start text-left mt-1">
+            <span class="font-bold">{{ note.title }}</span>
+            <p class="text-sm text-gray-800" v-html="note.description.length > 100 ? note.description.slice(0, 100) + '...' : note.description">
             </p>
         </div>
     </div>

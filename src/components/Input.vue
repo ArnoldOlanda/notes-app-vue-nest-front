@@ -13,14 +13,26 @@
             :placeholder="placeholder"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
+            data-testid="input"
         />
         <div
             v-if="inputType === 'password'"
-            @click="toggleShowPassword"
+            data-testid="show-password"
+            @click="showPassword = !showPassword"
             class="absolute right-2 top-9"
         >
-            <v-icon v-if="!showPassword" name="fa-eye" scale="1.5" class="text-primary"/>
-            <v-icon v-else name="fa-eye-slash" scale="1.5" class="text-primary"/>
+            <v-icon
+                v-if="!showPassword"
+                name="fa-eye"
+                scale="1.5"
+                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-primary'"
+            />
+            <v-icon 
+                v-else 
+                name="fa-eye-slash" 
+                scale="1.5" 
+                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-primary'"
+            />
         </div>
         <div v-if="validate" class="text-left">
             <div v-for="error in validate.$errors">
@@ -48,9 +60,4 @@ const props = defineProps({
 });
 
 const showPassword = ref(false);
-
-const toggleShowPassword = () => {
-    showPassword.value = !showPassword.value;
-}
-
 </script>
