@@ -1,13 +1,16 @@
 <template>
     <div class="collapse bg-transparent">
-        <input type="checkbox" :checked="props.open"/>
-        <div class="collapse-title text-md font-medium flex justify-between">
+        <input type="checkbox" :checked="props.open" />
+        <div
+            class="collapse-title text-md font-medium flex justify-between"
+        >
             {{ props.label }}
-            <v-icon name="fa-plus" />
+            <v-icon name="fa-plus" @click="openModal" class="z-10"/>
         </div>
         <div class="collapse-content px-0">
-            <slot />
+            <slot name="content" />
         </div>
+        <slot name="modal" />
     </div>
 </template>
 
@@ -17,12 +20,15 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    open:{
+    open: {
         type: Boolean,
         default: false,
-    }
+    },
+    openModal: {
+        type: Function,
+        required: true,
+    },
 });
-
 
 // const colapsed = ref(false);
 
