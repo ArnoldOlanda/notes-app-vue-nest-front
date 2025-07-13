@@ -1,5 +1,5 @@
 <template>
-    <div class="collapse bg-transparent">
+    <div class="collapse bg-transparent overflow-visible">
         <input type="checkbox" :checked="props.open" />
         <div
             class="collapse-title text-md font-medium flex justify-between"

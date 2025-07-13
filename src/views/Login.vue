@@ -10,6 +10,8 @@ import { useAuthStore } from "../store";
 import Input from "../components/Input.vue";
 import { swal } from "../components/commom/customSwal";
 
+import { API_URL } from "../constants";
+
 const router = useRouter();
 const store = useAuthStore();
 const { login } = store;
@@ -52,9 +54,9 @@ const handleClickLogin = async () => {
     }
 };
 
-// const loginGoogle = async () => {
-//     window.location.href = `${API_URL}/auth/google`;
-// };
+const loginGoogle = async () => {
+    window.location.href = `${API_URL}/auth/google`;
+};
 </script>
 <template>
     <div class="w-[100%] h-screen flex justify-center items-center">

@@ -48,9 +48,14 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     const loginWithGoogle = (token, payload) => {
+        console.log({ token, payload });
+        
         try {
             authState.value.auth = "authenticated";
-            authState.value.user = payload;
+            authState.value.user = {
+                ...payload,
+                id: +payload.id,
+            };
             authState.value.token = token;
         } catch (error) {
             throw error;
