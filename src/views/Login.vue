@@ -57,11 +57,15 @@ const handleClickLogin = async () => {
 const loginGoogle = async () => {
     window.location.href = `${API_URL}/auth/google`;
 };
+
+const loginGithub = async () => {
+    window.location.href = `${API_URL}/auth/github`;
+};
 </script>
 <template>
     <div class="w-[100%] h-screen flex justify-center items-center">
         <div
-            class="container w-[90%] md:w-[350px] border-2 bg-white bg-opacity-60 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-primary"
+            class="container w-[90%] md:w-[350px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-primary"
         >
             <div class="mt-2">
                 <v-icon name="fa-brain" scale="4" />
@@ -101,12 +105,20 @@ const loginGoogle = async () => {
                     </button>
                     <div class="mt-0 text-gray-700">or</div>
                     <button
-                        class="btn btn-base w-full"
+                        class="btn btn-base w-full mb-2"
                         @click="() => loginGoogle()"
                     >
                         <img src="/google.png" alt="" class="w-[26px] h-auto" />
 
                         Login with Google
+                    </button>
+                    <button class="btn btn-base github-signin-btn" @click="() => loginGithub()">
+                        <img
+                            src="https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png"
+                            alt="GitHub Icon"
+                            class="github-icon"
+                        />
+                        Sign in with GitHub
                     </button>
                 </div>
                 <span class="text-gray-700 inline-block mb-4">
@@ -121,3 +133,43 @@ const loginGoogle = async () => {
         </div>
     </div>
 </template>
+<style scoped>
+.github-signin-container {
+  background-color: #000;
+  transition: background-color 0.3s ease;
+  border-radius: 6px;
+  border: none;
+}
+
+.github-signin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.github-signin-btn:hover {
+  background-color: #333;
+}
+
+.github-signin-btn .github-icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
+}
+
+.github-signin-btn span {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+</style>

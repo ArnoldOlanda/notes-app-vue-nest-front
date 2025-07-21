@@ -5,6 +5,7 @@ import { useMutation } from "@vue/apollo-composable";
 
 import { LOGIN_MUTATION } from "../../graphql/mutations/login.mutation";
 import { REGISTER_MUTATION } from "../../graphql/mutations/register.mutation";
+import { ApolloError } from "@apollo/client/errors";
 
 
 export const useAuthStore = defineStore("auth", () => {
@@ -20,12 +21,19 @@ export const useAuthStore = defineStore("auth", () => {
     const { mutate: registerMutation, loading: registerLoading } = useMutation(REGISTER_MUTATION);
     
     const login = async (email = '', password = '') => {
-        const result = await loginMutation({ email, password });
-        if(result?.data?.login){
-            const { token, user } = result.data.login;
-            authState.value.auth = "authenticated";
-            authState.value.user = user;
-            authState.value.token = token;
+        try {
+            const result = await loginMutation({ email, password });
+            if(result?.data?.login){
+                const { token, user } = result.data.login;
+                authState.value.auth = "authenticated";
+                authState.value.user = user;
+                authState.value.token = token;
+            }
+        } catch (error) {
+            if(error instanceof ApolloError && error.networkError) {
+                throw new Error("Cannot connect to the server. Please check your internet connection.");
+            }
+            throw error;
         }
     }
 

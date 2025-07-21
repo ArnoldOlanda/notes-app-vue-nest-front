@@ -54,7 +54,7 @@ export const authGuard = async (to, from, next) => {
             console.error(error.message);
             mixin({
                 icon: 'error',
-                title: 'Error al establecer conexion con el servidor',
+                title: 'Session expired, please login again',
             })
             store.logout();
             return next({ name: "login" });
