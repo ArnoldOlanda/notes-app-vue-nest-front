@@ -7,6 +7,7 @@ import { LOGIN_MUTATION } from "../../graphql/mutations/login.mutation";
 import { REGISTER_MUTATION } from "../../graphql/mutations/register.mutation";
 import { ApolloError } from "@apollo/client/errors";
 import { FORGOT_PASSWORD_MUTATION } from "../../graphql/mutations/forgotPassword.mutation";
+import { RESET_PASSWORD_MUTATION } from "../../graphql/mutations/resetPassword.mutation";
 
 
 export const useAuthStore = defineStore("auth", () => {
@@ -21,6 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
     const { mutate: loginMutation, loading: loginLoading } = useMutation(LOGIN_MUTATION);
     const { mutate: registerMutation, loading: registerLoading } = useMutation(REGISTER_MUTATION);
     const { mutate: forgotPasswordMutation, loading: forgotPasswordLoading } = useMutation(FORGOT_PASSWORD_MUTATION);
+    const { mutate: resetPasswordMutation, loading: resetPasswordLoading } = useMutation(RESET_PASSWORD_MUTATION);
     
     const login = async (email = '', password = '') => {
         try {
@@ -54,6 +56,21 @@ export const useAuthStore = defineStore("auth", () => {
             const result = await forgotPasswordMutation({ email });
             if(result?.data?.forgotPassword){
                 const { message } = result.data.forgotPassword;
+                authState.value.errorMessage = message;
+            }
+        } catch (error) {
+            if(error instanceof ApolloError && error.networkError) {
+                throw new Error("Cannot connect to the server. Please check your internet connection.");
+            }
+            throw error;
+        }
+    }
+
+    const resetPassword = async (token, password) => {
+        try {
+            const result = await resetPasswordMutation({ token, password });
+            if(result?.data?.resetPassword){
+                const { message } = result.data.resetPassword;
                 authState.value.errorMessage = message;
             }
         } catch (error) {

@@ -1,21 +1,24 @@
 <script setup>
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { OhVueIcon as vIcon } from "oh-vue-icons";
 import { useVuelidate } from "@vuelidate/core";
 import { email, helpers, minLength, required } from "@vuelidate/validators";
+import { useMutation } from "@vue/apollo-composable";
 
 import { useAuthStore } from "../store";
 import Input from "../components/Input.vue";
 import { swal } from "../components/commom/customSwal";
 
 import { API_URL } from "../constants";
+import { RESET_PASSWORD_MUTATION } from "../graphql/mutations/resetPassword.mutation";
 
 const router = useRouter();
+const route = useRoute();
 const store = useAuthStore();
-const { forgotPassword } = store;
-const { forgotPasswordLoading:loading } = storeToRefs(store);
+const { mutate: resetPasswordMutation, loading } 
+    = useMutation(RESET_PASSWORD_MUTATION);
 
 const form = reactive({
     password: "",
@@ -46,12 +49,16 @@ const handleClickResetPassword = async () => {
         const isValid = await v$.value.$validate();
         if (!isValid) return;
 
-        // await forgotPassword(form.email);
-        // swal({
-        //     title: "Success",
-        //     text: "Please check your email for a password reset link.",
-        //     icon: "success",
-        // })
+        await resetPasswordMutation({
+            token: route.query.token || "",
+            password: form.password,
+        });
+        swal({
+            title: "Success",
+            text: "Password reset successfully, you can now login with your new password.",
+            icon: "success",
+        })
+        router.push({ name: "login" });
     } catch (error) {
         swal({
             title: "Error",
@@ -60,6 +67,10 @@ const handleClickResetPassword = async () => {
         })
     }
 };
+
+onMounted(()=>{
+    console.log(route.query);
+})
 
 </script>
 <template>
@@ -102,7 +113,7 @@ const handleClickResetPassword = async () => {
                         class="btn btn-primary text-white w-full"
                         form="login-form"
                     >
-                        {{ loginLoading ? "Loading..." : "Reset Password" }}
+                        {{ loading ? "Loading..." : "Reset Password" }}
                     </button>
                 </div>
             </div>
