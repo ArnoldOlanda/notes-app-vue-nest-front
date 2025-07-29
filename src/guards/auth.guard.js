@@ -5,6 +5,8 @@ import { mixin } from "../components/commom/customSwal";
 
 //@ts-check
 export const authGuard = async (to, from, next) => {
+    console.log(from);
+    
     const store = useAuthStore();
     
     // Handle Google OAuth callback

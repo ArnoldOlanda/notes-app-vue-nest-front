@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-screen bg-gradient-to-br from-blue-600 to-black">
+    <div class="w-full h-screen bg-blue-50">
         <router-view v-slot="{Component}">
             <transition name="fade" mode="out-in">
                 <component :is="Component"/>

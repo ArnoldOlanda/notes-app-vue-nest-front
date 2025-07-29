@@ -70,7 +70,7 @@ const loginGithub = async () => {
             <div class="mt-2">
                 <v-icon name="fa-brain" scale="4" />
                 <h2 class="text-2xl font-bold">Notes App</h2>
-                <h3 class="text-xl mt-6 font-bold">Welcome</h3>
+                <!-- <h3 class="text-xl mt-6 font-bold">Welcome</h3> -->
                 <h4 class="text-gray-800 font-semibold">
                     Login to your account
                 </h4>
@@ -95,6 +95,9 @@ const loginGithub = async () => {
                         label="Password"
                         :validate="v$.password"
                     />
+                    <div class="text-right text-sm">
+                        <router-link :to="{name: 'forgot-password'}">Recovery password</router-link>
+                    </div>
                 </form>
                 <div class="">
                     <button
@@ -105,7 +108,7 @@ const loginGithub = async () => {
                     </button>
                     <div class="mt-0 text-gray-700">or</div>
                     <button
-                        class="btn btn-base w-full mb-2"
+                        class="btn btn-base bg-white w-full mb-4 border-[1px] border-blue-400"
                         @click="() => loginGoogle()"
                     >
                         <img src="/google.png" alt="" class="w-[26px] h-auto" />

@@ -1,11 +1,13 @@
 import * as VueRouter from "vue-router";
+import { authGuard } from "../guards/auth.guard";
 import { useAuthStore } from "../store/auth/useAuthStore";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
+import ResetPassword from "../views/ResetPassword.vue";
 import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import PageNotFound from "../views/404.vue";
-import { authGuard } from "../guards/auth.guard";
 
 const routes = [
     {
@@ -14,6 +16,8 @@ const routes = [
         children: [
             { path: "login", name: "login", component: Login },
             { path: "register", name: "register", component: Register },
+            { path: "forgot-password", name: "forgot-password", component: ForgotPassword },
+            { path: "reset-password", name: "reset-password", component: ResetPassword },
         ],
     },
     {
