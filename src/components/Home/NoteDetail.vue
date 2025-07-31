@@ -33,7 +33,7 @@
                     </div>
                     <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
                         <button 
-                            class="btn btn-circle btn-error btn-sm text-white"
+                            class="btn btn-circle btn-soft btn-sm text-red-500"
                             @click="deleteNote"
                         >
                             <v-icon name="fa-trash-alt"/>
@@ -210,7 +210,7 @@ const saveNote = async () => {
                 updateNoteInput: {
                     title: form.title,
                     description: form.description,
-                    categoryId: form.category,
+                    categoryId: +form.category,
                     tagIds: form.tags.map(tag => tag.id),
                     date: selectedNote.value.date,
                 }
@@ -230,7 +230,7 @@ const saveNote = async () => {
                     title: form.title,
                     description: form.description,
                     date: new Date().toISOString().split('T')[0],
-                    categoryId: form.category,
+                    categoryId: +form.category,
                     tagIds: form.tags.map(tag => tag.id)
                 }
             })

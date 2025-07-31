@@ -21,9 +21,9 @@ export function useNotesCounts(userId) {
     const notesCategoriesWithCount = computed(() => result.value?.getNotesByCategoryWithCount);
     const notesTagsWithCount = computed(() => result.value?.getNotesByTagWithCount);
 
-    watch(result, (newValue) => {
-        console.log("Query result:", newValue);
-    });
+    // watch(result, (newValue) => {
+    //     console.log("Query result:", newValue);
+    // });
 
     watch(error, (error) => {
         console.log("Query error:", error);

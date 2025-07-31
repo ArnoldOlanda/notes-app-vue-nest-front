@@ -18,123 +18,123 @@ const { login } = store;
 const { loginLoading } = storeToRefs(store);
 
 const form = reactive({
-    email: "",
-    password: "",
+  email: "",
+  password: "",
 });
 
 const rules = reactive({
-    email: {
-        required: helpers.withMessage("The email is required", required),
-        email: helpers.withMessage("The email must be a valid email", email),
-    },
-    password: {
-        required: helpers.withMessage("The password is required", required),
-        length: helpers.withMessage(
-            "The password must be at least 6 characters",
-            minLength(6)
-        ),
-    },
+  email: {
+    required: helpers.withMessage("The email is required", required),
+    email: helpers.withMessage("The email must be a valid email", email),
+  },
+  password: {
+    required: helpers.withMessage("The password is required", required),
+    length: helpers.withMessage(
+      "The password must be at least 6 characters",
+      minLength(6),
+    ),
+  },
 });
 
 const v$ = useVuelidate(rules, form);
 
 const handleClickLogin = async () => {
-    try {
-        const isValid = await v$.value.$validate();
-        if (!isValid) return;
+  try {
+    const isValid = await v$.value.$validate();
+    if (!isValid) return;
 
-        await login(form.email, form.password);
-        router.push({ name: "home" });
-    } catch (error) {
-        swal({
-            title: "Error",
-            text: error.message,
-            icon: "error",
-        })
-    }
+    await login(form.email, form.password);
+    router.push({ name: "home" });
+  } catch (error) {
+    swal({
+      title: "Error",
+      text: error.message,
+      icon: "error",
+    });
+  }
 };
 
 const loginGoogle = async () => {
-    window.location.href = `${API_URL}/auth/google`;
+  window.location.href = `${API_URL}/auth/google`;
 };
 
 const loginGithub = async () => {
-    window.location.href = `${API_URL}/auth/github`;
+  window.location.href = `${API_URL}/auth/github`;
 };
 </script>
 <template>
-    <div class="w-[100%] h-screen flex justify-center items-center">
-        <div
-            class="container w-[90%] md:w-[350px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-primary"
+  <div class="flex min-h-screen w-[100%] items-center justify-center">
+    <div
+      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-white/30 bg-white bg-opacity-80 p-0 text-primary shadow-lg drop-shadow-xl backdrop-blur-md md:w-[350px] md:p-4"
+    >
+      <div class="mt-2">
+        <v-icon name="fa-brain" scale="3" />
+        <h2 class="text-2xl font-bold">Notes App</h2>
+        <!-- <h3 class="text-xl mt-6 font-bold">Welcome</h3> -->
+        <h4 class="font-semibold text-gray-800">Login to your account</h4>
+      </div>
+      <div class="flex w-full flex-col gap-5 px-5">
+        <form
+          id="login-form"
+          novalidate
+          @submit.prevent.stop="handleClickLogin"
         >
-            <div class="mt-2">
-                <v-icon name="fa-brain" scale="4" />
-                <h2 class="text-2xl font-bold">Notes App</h2>
-                <!-- <h3 class="text-xl mt-6 font-bold">Welcome</h3> -->
-                <h4 class="text-gray-800 font-semibold">
-                    Login to your account
-                </h4>
-            </div>
-            <div class="flex flex-col w-full gap-5 px-5">
-                <form
-                    id="login-form"
-                    novalidate
-                    @submit.prevent.stop="handleClickLogin"
-                >
-                    <Input
-                        placeholder="email"
-                        v-model="form.email"
-                        inputType="text"
-                        label="Email"
-                        :validate="v$.email"
-                    />
-                    <Input
-                        placeholder="password"
-                        v-model="form.password"
-                        inputType="password"
-                        label="Password"
-                        :validate="v$.password"
-                    />
-                    <div class="text-right text-sm">
-                        <router-link :to="{name: 'forgot-password'}">Recovery password</router-link>
-                    </div>
-                </form>
-                <div class="">
-                    <button
-                        class="btn btn-primary text-white w-full"
-                        form="login-form"
-                    >
-                        {{ loginLoading ? "Loading..." : "Login" }}
-                    </button>
-                    <div class="mt-0 text-gray-700">or</div>
-                    <button
-                        class="btn btn-base bg-white w-full mb-4 border-[1px] border-blue-400"
-                        @click="() => loginGoogle()"
-                    >
-                        <img src="/google.png" alt="" class="w-[26px] h-auto" />
+          <Input
+            placeholder="email"
+            v-model="form.email"
+            inputType="text"
+            label="Email"
+            :validate="v$.email"
+          />
+          <Input
+            placeholder="password"
+            v-model="form.password"
+            inputType="password"
+            label="Password"
+            :validate="v$.password"
+          />
+          <div class="text-right text-sm">
+            <router-link :to="{ name: 'forgot-password' }"
+              >Recovery password</router-link
+            >
+          </div>
+        </form>
+        <div class="">
+          <button class="btn btn-primary w-full text-white" form="login-form">
+            {{ loginLoading ? "Loading..." : "Login" }}
+          </button>
+          <div class="mt-0 text-gray-700">or</div>
+          <button
+            class="btn-base btn mb-2 w-full border-[1px] border-blue-400 bg-white"
+            @click="() => loginGoogle()"
+          >
+            <img src="/google.png" alt="" class="h-auto w-[26px]" />
 
-                        Login with Google
-                    </button>
-                    <button class="btn btn-base github-signin-btn" @click="() => loginGithub()">
-                        <img
-                            src="https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png"
-                            alt="GitHub Icon"
-                            class="github-icon"
-                        />
-                        Sign in with GitHub
-                    </button>
-                </div>
-                <span class="text-gray-700 inline-block mb-4">
-                    Don`t have a account?
-                    <b>
-                        <router-link to="/auth/register" class="text-primary">
-                            Register
-                        </router-link>
-                    </b>
-                </span>
-            </div>
+            Sign in with Google
+          </button>
+          <button
+            class="btn-base github-signin-btn btn"
+            @click="() => loginGithub()"
+          >
+            <img
+              src="https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png"
+              alt="GitHub Icon"
+              class="github-icon"
+            />
+            Sign in with GitHub
+          </button>
         </div>
+        <span class="mb-4 inline-block text-gray-700">
+          Don`t have a account?
+          <b>
+            <router-link to="/auth/register" class="text-primary">
+              Register
+            </router-link>
+          </b>
+        </span>
+      </div>
     </div>
+  </div>
 </template>
 <style scoped>
 .github-signin-container {

@@ -19,8 +19,7 @@ export function useNotesQuery(userId) {
     } = useQuery(GET_NOTES_BY_USER, () => ({ userId }));
 
     const getNotes = async () => {
-        const result = await refetch({userId});
-        console.log(result);
+        await refetch({userId});
     };
 
     const applyFilters = () => {
@@ -61,7 +60,7 @@ export function useNotesQuery(userId) {
     });
 
     watch(notesQuery, (newValue) => {
-        console.log("Notes query result:", newValue);
+        // console.log("Notes query result:", newValue);
         if (newValue?.getNotesByUserId) {
             notes.value = notesAdapter(newValue.getNotesByUserId);
             // Apply filters to the new notes

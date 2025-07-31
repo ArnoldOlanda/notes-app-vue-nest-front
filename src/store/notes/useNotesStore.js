@@ -54,6 +54,10 @@ export const useNotesStore = defineStore("notes", () => {
         );
     };
 
+    const refreshNotes = () => {
+        
+    }
+
     return {
         //State
         notes,
