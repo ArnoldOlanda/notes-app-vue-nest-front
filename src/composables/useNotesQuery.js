@@ -55,6 +55,13 @@ export function useNotesQuery(userId) {
         console.log("Applied filters:", filters, "Results:", filteredNotes.value.length);
     };
 
+    const clearFilters = () => {
+        console.log("Clearing filters");
+        filters.category = null;
+        filters.tag = null;
+        filteredNotes.value = [...notes.value];
+    };
+
     watch(filters, () => {        
         applyFilters();
     });
@@ -78,6 +85,8 @@ export function useNotesQuery(userId) {
         filters,
         notesLoading,
         notesError,
+
         getNotes,
+        clearFilters,
     };
 }

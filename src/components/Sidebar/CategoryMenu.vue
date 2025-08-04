@@ -29,15 +29,19 @@
         </template>
 
         <template #content>
-            <div v-for="category in notesCategoriesWithCount" :key="category.id" @click="filters.category = category.id"
-                class="px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
+            <div 
+                v-for="category in notesCategoriesWithCount" 
+                :key="category.id" 
+                @click="filters.category = category.id"
+                class="pl-10 pr-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
                 :class="{
                     'bg-blue-600': filters.category === category.id,
-                }">
+                }"
+            >
                 <span class="text-left">{{ category.category }} </span>
                 <div class="flex">
                     <span
-                        class="w-8 h-6 mr-4 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700"
+                        class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700"
                         :class="{
                             'bg-blue-700':
                                 filters.category === category.id,

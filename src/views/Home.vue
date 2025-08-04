@@ -1,7 +1,7 @@
 <template>
     <div class="flex w-full h-screen bg-pattern">
         <div class="w-full h-full flex shadow-2xl overflow-hidden">
-            <Sidebar class="w-2/12" />
+            <Sidebar />
             <NoteList class="w-3/12" />
             <NoteDetail class="flex-1" />
         </div>

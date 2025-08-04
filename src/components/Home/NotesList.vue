@@ -4,16 +4,27 @@
       <div class="flex w-full items-center justify-between px-8 pt-6">
         <span class="text-2xl font-bold">General</span>
         <div class="tooltip" data-tip="Reload">
-          <v-icon name="fa-retweet" scale="1.5" fill="#cccccc" @click="handleClickRefreshNotes" />
+          <v-icon 
+            name="fa-retweet" 
+            scale="1.5" 
+            class="text-gray-400" 
+            @click="handleClickRefreshNotes" 
+          />
         </div>
       </div>
-      <div class="flex w-full justify-start px-8 pt-4 text-gray-300">
+      <div class="flex w-full justify-between px-8 pt-4 text-gray-400">
         <span>{{ notes.length }} notes</span>
-        <!-- <div class="">
-          <v-icon name="fa-filter" />
-          <v-icon name="fa-tag" />
-          <v-icon name="fa-ellipsis-v" />
-        </div> -->
+        <div class="">
+          <div class="tooltip" data-tip="Clear all filters">
+            <v-icon 
+              name="fa-filter" 
+              @click="handleClearFilters" 
+              class="cursor-pointer" 
+            />
+          </div>
+          <!-- <v-icon name="fa-tag" />
+          <v-icon name="fa-ellipsis-v" /> -->
+        </div>
       </div>
       <div class="my-2 flex w-full flex-col gap-3">
 				<SearchBox />
@@ -39,6 +50,10 @@ const { filteredNotes: notes, notesLoading } = storeToRefs(notesStore);
 
 const handleClickRefreshNotes = async () => {
 	await notesStore.getNotes();
+}
+
+const handleClearFilters = () => {
+	notesStore.clearFilters();
 }
 
 </script>

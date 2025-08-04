@@ -2,7 +2,7 @@
     <div class="collapse bg-transparent overflow-visible">
         <input type="checkbox" :checked="props.open" />
         <div
-            class="collapse-title text-md font-medium flex justify-between"
+            class="collapse-title text-md font-medium flex justify-between px-10"
         >
             {{ props.label }}
             <v-icon name="fa-plus" @click="openModal" class="z-10"/>

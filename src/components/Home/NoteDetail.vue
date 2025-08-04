@@ -114,24 +114,37 @@
 import { nextTick, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor } from "vue3-quill";
+import { useMutation } from "@vue/apollo-composable";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
 import { deleteNoteService, getNotesService } from "../../services/notes.service";
 import { confirm, swal } from "../commom/customSwal";
 import { notesAdapter } from "../../adapters/notes.adapter";
-
-import "vue3-quill/lib/vue3-quill.css";
-import { useMutation } from "@vue/apollo-composable";
 import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
 import { UPDATE_NOTE_MUTATION } from "../../graphql/mutations/updateNote.mutation";
+
+import "vue3-quill/lib/vue3-quill.css";
+import { DELETE_NOTE_MUTATION } from "../../graphql/mutations/deleteNote.mutation";
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
 const { selectedNote, currentMode, tags, categories } = storeToRefs(notesStore);
 
-const { mutate: createNoteMutation, loading: createNoteLoading } = useMutation(CREATE_NOTE_MUTATION)
-const { mutate: updateNoteMutation, loading: updateNoteLoading } = useMutation(UPDATE_NOTE_MUTATION)
+const { 
+    mutate: createNoteMutation, 
+    loading: createNoteLoading 
+} = useMutation(CREATE_NOTE_MUTATION)
+
+const { 
+    mutate: updateNoteMutation, 
+    loading: updateNoteLoading 
+} = useMutation(UPDATE_NOTE_MUTATION)
+
+const {
+    mutate: deleteNoteMutation,
+    loading: deleteNoteLoading
+} = useMutation(DELETE_NOTE_MUTATION);
 
 const state = reactive({
     editorOption: {
@@ -192,7 +205,7 @@ const handleClickEditTitle = () => {
 };
 
 const saveNote = async () => {
-    if(!form.title || !form.description || !form.category || !form.tags.length){
+    if(!form.title || !form.description || !form.category){
         swal({
             title: "Error",
             text: "Please complete all required fields",
@@ -270,24 +283,34 @@ const deleteNote = async () =>{
             cancelButtonText: "No, cancel",
         })
         if(!isConfirmed) return;
-        notesStore.setLoading(true);
-        await deleteNoteService(selectedNote.value.id);
-        swal({
-            title: "Success",
-            text: "Note deleted successfully",
-            icon: "success",
-        });
+        
+        const id = selectedNote.value.id;
+        const result = await deleteNoteMutation({ id });
+
+        // console.log(result);
+        
+        if(result?.data?.deleteNote){
+            swal({
+                title: "Success",
+                text: "Note deleted successfully",
+                icon: "success",
+            });
+        }
+
         selectedNote.value = null;
-        const notes = await getNotesService(authStore.authState.user.id);
-        notesStore.setNotes(notesAdapter(notes));
-        notesStore.refreshNotesCount(authStore.authState.user.id);
+
+        await Promise.all([
+            notesStore.getNotes(),
+            notesStore.refetchNotesCounts()
+        ]);
+
     } catch (error) {
+        console.log(error);
         swal({
             title: "Error",
             text: "An error occurred while deleting the note",
             icon: "error",
         })
-        console.log(error);
     }
 }
 

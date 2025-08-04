@@ -10,7 +10,7 @@ export const useNotesStore = defineStore("notes", () => {
     const authStore = useAuthStore();
     const userId = authStore.authState.user.id;
 
-    const { notes, filteredNotes, filters, notesLoading, getNotes } = useNotesQuery(userId);
+    const { notes, filteredNotes, filters, notesLoading, getNotes, clearFilters } = useNotesQuery(userId);
     const { tags } = useTagsQuery(userId);
     const { categories } = useCategoriesQuery(userId);
     const { 
@@ -82,6 +82,7 @@ export const useNotesStore = defineStore("notes", () => {
         setSelectedNote,
         filterNotes,
         queryNotes,
+        clearFilters,
         setCurrentMode,
     };
 });
