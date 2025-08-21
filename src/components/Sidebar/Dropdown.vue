@@ -1,5 +1,15 @@
 <template>
-    <div class="dropdown dropdown-bottom">
+    <div 
+        class="dropdown"
+        :class="{
+            'dropdown-bottom': bottom,
+            'dropdown-right': right,
+            'dropdown-top': top,
+            'dropdown-left': left,
+            'dropdown-center': center,
+            'dropdown-end': end,
+        }"
+    >
         <div 
             tabindex="0" 
             role="button"
@@ -19,14 +29,14 @@
 
 <script setup>
 const props = defineProps({
-    icon: {
-        type: String,
-        required: true,
-    },
-    className: {
-        type: String,
-        default: "",
-    }
+    icon: { type: String, required: true },
+    className: { type: String, default: "" },
+    bottom: { type: Boolean, default: false },
+    right: { type: Boolean, default: false },
+    top: { type: Boolean, default: false },
+    left: { type: Boolean, default: false },
+    center: { type: Boolean, default: false },
+    end: { type: Boolean, default: false }
 })
 </script>
 

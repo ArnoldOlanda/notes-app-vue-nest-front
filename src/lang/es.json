@@ -1,0 +1,28 @@
+{
+    "siderbar":{
+        "menus":{
+            "category": "CATEGORIAS",
+            "tag": "ETIQUETAS",
+            "trash": "PAPELERA"
+        },
+        "options":{
+            "profile": "Perfil",
+            "theme": "Tema",
+            "settings": "Ajustes",
+            "changePassword": "Cambiar contraseña",
+            "logout": "Cerrar sesión"
+        }
+    },
+    "notes_list":{
+        "reload": "Recargar",
+        "clear_filters": "Limpiar filtros",
+        "note": "1 nota | {count} notas",
+        "search_notes": "Buscar notas...",
+        "add_note": "AÑADIR NOTA"
+    },
+    "settings":{
+        "title": "Ajustes",
+        "language": "Idioma",
+        "theme": "Tema"
+    }
+}

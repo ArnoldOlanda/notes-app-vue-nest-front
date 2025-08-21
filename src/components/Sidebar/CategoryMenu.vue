@@ -1,5 +1,5 @@
 <template>
-    <menu-item label="CATEGORIES" :openModal="showCategoriesModal" open>
+    <menu-item :label="t('siderbar.menus.category')" :openModal="showCategoriesModal" open>
         <template #modal>
             <dialog id="categoriesModal" class="modal">
                 <div class="modal-box text-black">
@@ -77,6 +77,7 @@
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMutation } from '@vue/apollo-composable';
+import { useI18n } from 'vue-i18n';
 import { confirm, mixin } from '../commom/customSwal';
 import { useAuthStore, useNotesStore } from '../../store';
 import MenuItem from '../Home/MenuItem.vue';
@@ -86,6 +87,7 @@ import { DELETE_CATEGORY_MUTATION } from '../../graphql/mutations/deleteCategory
 
 const store = useAuthStore();
 const notesStore = useNotesStore();
+const {t} = useI18n();
 
 const { authState } = storeToRefs(store);
 const { notesCategoriesWithCount, filters } = storeToRefs(notesStore);

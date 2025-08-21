@@ -1,6 +1,6 @@
 <template>
     <div
-        class="px-8 py-5 border-gray-200 border-y-[1px] cursor-pointer hover:bg-gray-200 transition-colors"
+        class="px-8 py-5 border-base-300 border-y-[1px] cursor-pointer hover:bg-gray-200 transition-colors"
         @click="handleClickNote"
     >
         <div class="flex flex-col justify-between">
@@ -21,7 +21,7 @@
         </div>
         <div class="flex flex-col items-start text-left mt-1">
             <span class="font-bold">{{ note.title }}</span>
-            <p class="text-sm text-gray-800" v-html="note.description.length > 100 ? note.description.slice(0, 100) + '...' : note.description">
+            <p class="text-sm text-base-content" v-html="note.description.length > 100 ? note.description.slice(0, 100) + '...' : note.description">
             </p>
         </div>
     </div>

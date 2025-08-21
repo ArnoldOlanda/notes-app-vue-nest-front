@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col bg-white p-10 h-full">
+    <div class="flex flex-col bg-base-100 p-10 h-full">
         <div v-if="selectedNote" class="relative h-full">
             <div>
                 <div class="flex items-center mb-4">

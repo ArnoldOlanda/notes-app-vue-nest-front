@@ -9,6 +9,21 @@ export default {
         daisyui,
     ],
     daisyui:{
-        themes: ["light", "dark", "winter"],
+        themes: [
+            {
+                light: {
+                ...require("daisyui/src/theming/themes")["light"],
+                primary: "#007AFF",
+                // secondary: "blue",
+                },
+            }
+            , {
+                dark: {
+                    ...require("daisyui/src/theming/themes")["dark"],
+                    primary: "#031529",
+                    // secondary: "blue",
+                }
+            }
+        ],
     }
 };

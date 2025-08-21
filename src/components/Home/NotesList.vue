@@ -1,9 +1,9 @@
 <template>
-  <div class="flex h-full w-2/6 flex-col bg-gray-100 lg:w-1/4">
+  <div class="flex h-full w-2/6 flex-col bg-base-200 lg:w-1/4">
     <div class="my-2">
       <div class="flex w-full items-center justify-between px-8 pt-6">
         <span class="text-2xl font-bold">General</span>
-        <div class="tooltip" data-tip="Reload">
+        <div class="tooltip" :data-tip="$t('notes_list.reload')">
           <v-icon 
             name="fa-retweet" 
             scale="1.5" 
@@ -13,9 +13,11 @@
         </div>
       </div>
       <div class="flex w-full justify-between px-8 pt-4 text-gray-400">
-        <span>{{ notes.length }} notes</span>
+        <span>
+          {{ $t('notes_list.note', notes.length, { count: notes.length }) }}
+        </span>
         <div class="">
-          <div class="tooltip" data-tip="Clear all filters">
+          <div class="tooltip" :data-tip="$t('notes_list.clear_filters')">
             <v-icon 
               name="fa-filter" 
               @click="handleClearFilters" 

@@ -4,7 +4,7 @@
   >
     <input
       type="text"
-      placeholder="Search notes..."
+      :placeholder="$t('notes_list.search_notes')"
       class="flex-1 bg-transparent p-3 outline-none"
       v-model="query"
     />

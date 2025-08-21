@@ -5,7 +5,9 @@
       @click="handleClickAddNote"
     >
       <v-icon name="fa-plus" />
-      <span class="ml-2">ADD NOTE</span>
+      <span class="ml-2">
+        {{ $t("notes_list.add_note") }}
+      </span>
     </button>
   </div>
 </template>

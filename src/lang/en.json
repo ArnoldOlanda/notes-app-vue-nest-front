@@ -1,0 +1,28 @@
+{
+    "siderbar":{
+        "menus":{
+            "category": "CATEGORIES",
+            "tag": "TAGS",
+            "trash": "TRASH"
+        },
+        "options":{
+            "profile": "Profile",
+            "theme": "Theme",
+            "settings": "Settings",
+            "changePassword": "Change Password",
+            "logout": "Logout"
+        }
+    },
+    "notes_list":{
+        "reload": "Reload",
+        "clear_filters": "Clear all filters",
+        "note": "1 note | {count} notes",
+        "search_notes": "Search notes...",
+        "add_note": "ADD NOTE"
+    },
+    "settings":{
+        "title": "Settings",
+        "language": "Language",
+        "theme": "Theme"
+    }
+}

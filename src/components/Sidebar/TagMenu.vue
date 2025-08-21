@@ -1,5 +1,5 @@
 <template>
-    <menu-item label="TAGS" :openModal="showTagsModal">
+    <menu-item :label="t('siderbar.menus.tag')" :openModal="showTagsModal">
         <template #modal>
             <dialog id="tagsModal" class="modal">
                 <div class="modal-box text-black">
@@ -29,11 +29,11 @@
         </template>
         <template #content>
             <div v-for="tag in notesTagsWithCount" :key="tag.id" @click="filters.tag = tag.id"
-                class="px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
+                class="pl-10 px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
                 :class="{ 'bg-blue-600': filters.tag === tag.id }">
                 <span class="text-left">{{ tag.name }} </span>
                 <div class="flex">
-                    <span class="w-8 h-6 mr-4 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700" 
+                    <span class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700" 
                     :class="{
                         'bg-blue-700': filters.tag === tag.id,
                     }">
@@ -68,6 +68,7 @@
 import { ref } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore, useNotesStore } from '../../store';
 import { confirm, mixin } from '../commom/customSwal';
 import MenuItem from '../Home/MenuItem.vue';
@@ -77,6 +78,7 @@ import { DELETE_TAG_MUTATION } from '../../graphql/mutations/deleteTag.mutation'
 
 const store = useAuthStore();
 const notesStore = useNotesStore();
+const { t } = useI18n();
 
 const { authState } = storeToRefs(store);
 const { notesTagsWithCount, filters } = storeToRefs(notesStore);
