@@ -6,19 +6,22 @@
         </div>
         <dropdown icon="fa-angle-right" class-name="w-48" right end>
             <dropdown-item icon="fa-cog" @click="showSettingsModal">
-                {{ $t('siderbar.options.settings') }}
+                {{ $t('sidebar.options.settings') }}
             </dropdown-item>
 
             <dropdown-item icon="fa-sign-out-alt" @click="logout">
-                {{ $t('siderbar.options.logout') }}
+                {{ $t('sidebar.options.logout') }}
             </dropdown-item>
         </dropdown>
 
-        <dialog id="settingsModal" class="modal">
-            <div class="modal-box text-black">
+        <modal id="settingsModal">
+            <template #title>
                 <h3 class="text-lg font-bold">
                     {{ $t('settings.title') }}
                 </h3>
+            </template>
+            
+            <template #content>
                 <div class="grid grid-cols-1 gap-4 pt-4">
                     <div class="flex flex-col gap-1">
                         <label for="" class=" text-left font-semibold">{{ $t('settings.language') }}:</label>
@@ -32,41 +35,27 @@
                             <option value="es">Español</option>
                         </select>
                     </div>
-                    <div class="flex items-center">
-                        <toggle-theme/>
-                    </div>
                 </div>
-                <div class="modal-action">
-                    <form method="dialog">
-                        <button class="btn btn-primary btn-sm">
-                            Close
-                        </button>
-                    </form>
-                    <!-- <button 
-                        class="btn btn-primary btn-sm" 
-                        @click="saveChanges"
-                        :disabled="newLocale === currentLocale"
-                    >
-                        Save
-                    </button> -->
-                </div>
-            </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
-            </form>
-        </dialog>
+            </template>
+
+            <template #actions>
+                <button class="btn btn-primary btn-sm text-white">
+                    {{ $t('actions.close') }}
+                </button>
+            </template>
+        </modal>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '../../store';
 import Dropdown from './Dropdown.vue';
 import DropdownItem from './DropwdownItem.vue';
-import { confirm, mixin } from '../commom/customSwal';
-import ToggleTheme from './ToggleTheme.vue';
-import { useI18n } from 'vue-i18n';
+import { confirm } from '../commom/customSwal';
+import Modal from '../commom/Modal.vue';
 
 const store = useAuthStore();
 const router = useRouter();

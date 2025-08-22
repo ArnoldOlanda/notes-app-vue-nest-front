@@ -14,12 +14,13 @@
             tabindex="0" 
             role="button"
             @click.stop.prevent
+            :class="iconWrapperClassName"
         >
             <v-icon :name="icon" class="text-white"/>
         </div>
         <ul 
             tabindex="0"
-            class="dropdown-content z-10 menu bg-base-100 text-neutral-800 rounded-md p-1 shadow-sm"
+            class="dropdown-content z-10 menu bg-base-100 rounded-md p-1 shadow-sm"
             :class="className"
         >
             <slot />
@@ -31,6 +32,7 @@
 const props = defineProps({
     icon: { type: String, required: true },
     className: { type: String, default: "" },
+    iconWrapperClassName: { type: String, default: "" },
     bottom: { type: Boolean, default: false },
     right: { type: Boolean, default: false },
     top: { type: Boolean, default: false },

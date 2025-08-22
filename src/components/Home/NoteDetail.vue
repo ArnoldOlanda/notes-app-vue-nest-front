@@ -30,14 +30,14 @@
                             <button class="ql-align" value="center"><v-icon name="fa-align-center" /></button>
                             <button class="ql-align" value="right"><v-icon name="fa-align-right" /></button>
                         </div>
-                    </div>
-                    <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
-                        <button 
-                            class="btn btn-circle btn-soft btn-sm text-red-500"
-                            @click="deleteNote"
-                        >
-                            <v-icon name="fa-trash-alt"/>
-                        </button>
+                        <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
+                            <button 
+                                class="btn btn-circle btn-soft btn-sm text-red-500"
+                                @click="deleteNote"
+                            >
+                                <v-icon name="fa-trash-alt"/>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="w-full flex justify-start">

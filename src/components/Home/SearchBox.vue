@@ -1,6 +1,6 @@
 <template>
   <div
-    class="ml-8 mr-8 flex items-center rounded bg-gray-200 pr-2 text-gray-400"
+    class="ml-8 mr-8 flex items-center rounded bg-base-300 pr-2 text-gray-400"
   >
     <input
       type="text"
@@ -8,7 +8,7 @@
       class="flex-1 bg-transparent p-3 outline-none"
       v-model="query"
     />
-    <v-icon name="fa-search" />
+    <v-icon name="fa-search"/>
   </div>
 </template>
 

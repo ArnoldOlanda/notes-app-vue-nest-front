@@ -1,5 +1,5 @@
 {
-    "siderbar":{
+    "sidebar":{
         "menus":{
             "category": "CATEGORIAS",
             "tag": "ETIQUETAS",
@@ -11,6 +11,11 @@
             "settings": "Ajustes",
             "changePassword": "Cambiar contraseña",
             "logout": "Cerrar sesión"
+        },
+        "labels": {
+            "create_category": "Crear nueva categoría",
+            "create_tag": "Crear nueva etiqueta",
+            "name": "Nombre"
         }
     },
     "notes_list":{
@@ -24,5 +29,16 @@
         "title": "Ajustes",
         "language": "Idioma",
         "theme": "Tema"
+    },
+    "actions":{
+        "create": "Crear",
+        "edit": "Editar",
+        "update": "Actualizar",
+        "delete": "Eliminar",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "close": "Cerrar",
+        "confirm": "Confirmar",
+        "ok": "Ok"
     }
 }

@@ -11,11 +11,11 @@
         
         <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom>
             <dropdown-item icon="fa-user" @click="$emit('profile-click')">
-                {{ $t('siderbar.options.profile') }}
+                {{ $t('sidebar.options.profile') }}
             </dropdown-item>
 
             <dropdown-item icon="fa-user-lock" @click="">
-                {{ $t('siderbar.options.changePassword') }}
+                {{ $t('sidebar.options.changePassword') }}
             </dropdown-item>
         </dropdown>
     </div>

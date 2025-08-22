@@ -1,6 +1,6 @@
 <template>
     <li>
-        <a href="#" @click="$emit('click')" class="text-neutral-600 hover:text-blue-500">
+        <a href="#" @click="$emit('click')" class="text-base-content hover:text-blue-500">
             <v-icon 
                 :name="icon" 
                 animation="wrench" 

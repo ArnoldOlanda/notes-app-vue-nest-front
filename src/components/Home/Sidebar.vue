@@ -5,7 +5,7 @@
             <div class="w-full">                
                 <category-menu />
                 <tag-menu />
-                <menu-item :label="$t('siderbar.menus.trash')"></menu-item>
+                <menu-item :label="$t('sidebar.menus.trash')"></menu-item>
             </div>
         </div>
         <sidebar-footer />

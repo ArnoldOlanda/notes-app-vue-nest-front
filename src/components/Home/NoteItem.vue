@@ -1,6 +1,6 @@
 <template>
     <div
-        class="px-8 py-5 border-base-300 border-y-[1px] cursor-pointer hover:bg-gray-200 transition-colors"
+        class="px-8 py-5 border-base-300 border-y-[1px] cursor-pointer hover:bg-base-300 transition-colors"
         @click="handleClickNote"
     >
         <div class="flex flex-col justify-between">

@@ -1,5 +1,5 @@
 {
-    "siderbar":{
+    "sidebar":{
         "menus":{
             "category": "CATEGORIES",
             "tag": "TAGS",
@@ -11,6 +11,11 @@
             "settings": "Settings",
             "changePassword": "Change Password",
             "logout": "Logout"
+        },
+        "labels": {
+            "create_category": "Create New Category",
+            "create_tag": "Create New Tag",
+            "name": "Name"
         }
     },
     "notes_list":{
@@ -24,5 +29,16 @@
         "title": "Settings",
         "language": "Language",
         "theme": "Theme"
+    },
+    "actions":{
+        "create": "Create",
+        "edit": "Edit",
+        "update": "Update",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "close": "Close",
+        "confirm": "Confirm",
+        "ok": "Ok"
     }
 }

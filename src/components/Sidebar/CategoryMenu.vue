@@ -1,24 +1,24 @@
 <template>
-    <menu-item :label="t('siderbar.menus.category')" :openModal="showCategoriesModal" open>
+    <menu-item :label="t('sidebar.menus.category')" :openModal="showCategoriesModal" open>
         <template #modal>
             <dialog id="categoriesModal" class="modal">
-                <div class="modal-box text-black">
+                <div class="modal-box text-base-content">
                     <h3 class="text-lg font-bold">
-                        Create New Category
+                        {{ $t('sidebar.labels.create_category') }}
                     </h3>
                     <div class="flex flex-col gap-2 py-4">
-                        <div class="text-left">Name</div>
-                        <input type="text" class="input input-bordered input-primary" placeholder="Category Name"
+                        <div class="text-left">{{ $t('sidebar.labels.name') }}</div>
+                        <input type="text" class="input input-bordered input-primary"
                             v-model="newCategoryName" />
                     </div>
                     <div class="modal-action">
                         <form method="dialog">
                             <button class="btn btn-sm">
-                                Close
+                                {{ $t('actions.close') }}
                             </button>
                         </form>
                         <button class="btn btn-primary btn-sm" @click="handleSubmit">
-                            {{ mode === "create" ? "Create" : "Update" }}
+                            {{ mode === "create" ? $t('actions.create') : $t('actions.update') }}
                         </button>
                     </div>
                 </div>
@@ -33,40 +33,34 @@
                 v-for="category in notesCategoriesWithCount" 
                 :key="category.id" 
                 @click="filters.category = category.id"
-                class="pl-10 pr-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
+                class="pl-10 pr-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-primary-hover cursor-pointer"
                 :class="{
-                    'bg-blue-600': filters.category === category.id,
+                    'bg-primary-active': filters.category === category.id,
                 }"
             >
                 <span class="text-left">{{ category.category }} </span>
                 <div class="flex">
                     <span
-                        class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700"
+                        class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:counter-focus"
                         :class="{
-                            'bg-blue-700':
+                            'counter-focus':
                                 filters.category === category.id,
                         }">
                         {{ category.count }}
                     </span>
-                    <div class="dropdown dropdown-bottom">
-                        <div :tabindex="category.id" role="button"
-                            class="group-hover:opacity-100 opacity-0 transition-all" @click.stop.prevent>
-                            <v-icon name="fa-ellipsis-v" />
-                        </div>
-                        <ul :tabindex="category.id"
-                            class="dropdown-content z-10 menu bg-base-100 text-neutral-800 rounded-md w-28 p-1 shadow-sm">
-                            <li>
-                                <a href="#" @click="handleUpdate(category)">
-                                    <v-icon name="fa-edit" animation="wrench" color="#262626" hover />Editar
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" @click="handleDeleteCategory(category.id)">
-                                    <v-icon name="fa-trash" animation="wrench" color="#262626" hover />Eliminar
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <dropdown 
+                        icon="fa-ellipsis-v" 
+                        class-name="w-48"
+                        icon-wrapper-class-name="group-hover:opacity-100 opacity-0 transition-all" 
+                        right
+                    >
+                        <dropdown-item icon="fa-edit" @click="handleUpdate(category)">
+                            {{ $t('actions.edit') }}
+                        </dropdown-item>
+                        <dropdown-item icon="fa-trash" @click="handleDeleteCategory(category.id)">
+                            {{ $t('actions.delete') }}
+                        </dropdown-item>
+                    </dropdown>
                 </div>
             </div>
         </template>
@@ -80,10 +74,12 @@ import { useMutation } from '@vue/apollo-composable';
 import { useI18n } from 'vue-i18n';
 import { confirm, mixin } from '../commom/customSwal';
 import { useAuthStore, useNotesStore } from '../../store';
-import MenuItem from '../Home/MenuItem.vue';
 import { CREATE_CATEGORY_MUTATION } from '../../graphql/mutations/createCategory.mutation';
 import { UPDATE_CATEGORY_MUTATION } from '../../graphql/mutations/updateCategory.mutation';
 import { DELETE_CATEGORY_MUTATION } from '../../graphql/mutations/deleteCategory.mutation';
+import MenuItem from '../Home/MenuItem.vue';
+import Dropdown from './Dropdown.vue';
+import DropdownItem from './DropwdownItem.vue';
 
 const store = useAuthStore();
 const notesStore = useNotesStore();

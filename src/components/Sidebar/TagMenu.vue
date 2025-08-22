@@ -1,24 +1,24 @@
 <template>
-    <menu-item :label="t('siderbar.menus.tag')" :openModal="showTagsModal">
+    <menu-item :label="t('sidebar.menus.tag')" :openModal="showTagsModal">
         <template #modal>
             <dialog id="tagsModal" class="modal">
-                <div class="modal-box text-black">
+                <div class="modal-box text-base-content">
                     <h3 class="text-lg font-bold">
-                        Create New Tag
+                        {{ $t('sidebar.labels.create_tag') }}
                     </h3>
                     <div class="flex flex-col gap-2 py-4">
-                        <div class="text-left">Name</div>
-                        <input type="text" class="input input-bordered input-primary" placeholder="Tag Name"
+                        <div class="text-left">{{ $t('sidebar.labels.name') }}</div>
+                        <input type="text" class="input input-bordered input-primary"
                             v-model="newTagName" />
                     </div>
                     <div class="modal-action">
                         <form method="dialog">
                             <button class="btn btn-sm">
-                                Close
+                                {{ $t('actions.close') }}
                             </button>
                         </form>
                         <button class="btn btn-primary btn-sm" @click="handleSubmit">
-                            {{ mode === "create" ? "Create" : "Update" }}
+                            {{ mode === "create" ? $t('actions.create') : $t('actions.update') }}
                         </button>
                     </div>
                 </div>
@@ -29,13 +29,13 @@
         </template>
         <template #content>
             <div v-for="tag in notesTagsWithCount" :key="tag.id" @click="filters.tag = tag.id"
-                class="pl-10 px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-blue-600 cursor-pointer"
-                :class="{ 'bg-blue-600': filters.tag === tag.id }">
+                class="pl-10 px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-primary-hover cursor-pointer"
+                :class="{ 'bg-primary-active': filters.tag === tag.id }">
                 <span class="text-left">{{ tag.name }} </span>
                 <div class="flex">
-                    <span class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:bg-blue-700" 
+                    <span class="w-8 h-6 rounded-xl text-sm flex items-center justify-center group-hover:counter-focus" 
                     :class="{
-                        'bg-blue-700': filters.tag === tag.id,
+                        'counter-focus': filters.tag === tag.id,
                     }">
                         {{ tag.count }}
                     </span>
