@@ -13,13 +13,15 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
 import { useNotesStore } from "../../store";
 
 const notesStore = useNotesStore();
+const {t} = useI18n();
 
 const handleClickAddNote = () => {
   notesStore.setSelectedNote({
-    title: "Nueva nota",
+    title: t("note_detail.labels.title"),
     description: "",
     category: "1",
     tags: [],

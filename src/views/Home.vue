@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-full h-screen bg-pattern">
+    <div class="flex w-full h-screen bg-pattern" :data-theme="config.theme">
         <div class="w-full relative h-full flex shadow-2xl overflow-hidden">
             <Sidebar />
             <NoteList class="w-3/12" />
@@ -12,11 +12,18 @@
 <script setup>
 import { onMounted, } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
+
 import Sidebar from "../components/Home/Sidebar.vue";
 import NoteList from "../components/Home/NotesList.vue";
 import NoteDetail from "../components/Home/NoteDetail.vue";
 import ToggleTheme from "../components/Sidebar/ToggleTheme.vue";
+import { useConfigStore } from "../store/config/useConfigStore";
 
+const store = useConfigStore();
+const { locale } = useI18n();
+const { config } = storeToRefs(store);
 
 const router = useRouter();
 const route = useRoute();
@@ -25,7 +32,12 @@ onMounted(() => {
     const query = route.query;
     if (query) {
         router.replace({ name: route.name, query: null });
-    }        
+    }
+
+    //Set locale
+    if (config.value && config.value.language) {
+        locale.value = config.value.language;
+    }
 });
 </script>
 

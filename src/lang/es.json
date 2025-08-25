@@ -25,10 +25,20 @@
         "search_notes": "Buscar notas...",
         "add_note": "AÑADIR NOTA"
     },
+    "note_detail":{
+        "labels":{
+            "title": "Título",
+            "write_note": "Escribe tu nota",
+            "tags": "Etiquetas",
+            "choose_a_note": "Elige una nota"
+        }
+    },
     "settings":{
         "title": "Ajustes",
         "language": "Idioma",
-        "theme": "Tema"
+        "theme": "Tema",
+        "about": "Acerca de",
+        "privacy_policy": "Política de privacidad"
     },
     "actions":{
         "create": "Crear",

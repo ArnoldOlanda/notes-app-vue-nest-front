@@ -1,6 +1,6 @@
 <template>
     <dialog :id="id" class="modal">
-        <div class="modal-box text-base-content">
+        <div class="modal-box text-base-content" :class="className">
             <slot name="title"></slot>
             <slot name="content"></slot>
 
@@ -25,7 +25,8 @@
 
 defineProps({
     id:{type: String, required: true},
-    closeOnClickOutside:{type: Boolean, default: false}
+    closeOnClickOutside:{type: Boolean, default: false},
+    className:{type: String, default: ''},
 });
 
 </script>

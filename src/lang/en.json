@@ -25,10 +25,20 @@
         "search_notes": "Search notes...",
         "add_note": "ADD NOTE"
     },
+    "note_detail":{
+        "labels":{
+            "title": "Title",
+            "write_note": "Write your note",
+            "tags": "Tags",
+            "choose_a_note": "Choose a note"
+        }
+    },
     "settings":{
         "title": "Settings",
         "language": "Language",
-        "theme": "Theme"
+        "theme": "Theme",
+        "about": "About",
+        "privacy_policy": "Privacy Policy"
     },
     "actions":{
         "create": "Create",

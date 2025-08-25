@@ -1,9 +1,8 @@
 <template>
   <div class="absolute right-4 top-4">
-    <!-- <label for="" class="text-left font-semibold">{{ $t("settings.theme") }}:</label> -->
     <label class="swap swap-rotate">
      <!-- this hidden checkbox controls the state -->
-      <input type="checkbox" class="theme-controller" value="dark" />
+      <input type="checkbox" class="theme-controller" value="dark" @change="onChange" />
 
       <!-- sun icon -->
       <svg
@@ -25,4 +24,19 @@
     </label>
   </div>
 </template>
-<script setup></script>
+<script setup>
+import { storeToRefs } from 'pinia';
+import { useConfigStore } from '../../store/config/useConfigStore';
+
+const configStore = useConfigStore();
+const { config } = storeToRefs(configStore);
+
+const onChange = () => {
+    if(config.value.theme === 'dark'){
+        configStore.setConfig({theme: 'light'});
+    }else{
+        configStore.setConfig({theme: 'dark'});
+    }
+}
+
+</script>

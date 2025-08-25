@@ -3,7 +3,7 @@
         <div v-if="selectedNote" class="relative h-full">
             <div>
                 <div class="flex items-center mb-4">
-                    <select class="select select-bordered w-36" v-model="form.category">
+                    <select class="select select-bordered select-xs w-36" v-model="form.category">
                         <option :value="category.id" v-for="category in categories" :key="category.id">
                             {{ category.name }}
                         </option>
@@ -29,6 +29,10 @@
                             <button class="ql-align"><v-icon name="fa-align-left" /></button>
                             <button class="ql-align" value="center"><v-icon name="fa-align-center" /></button>
                             <button class="ql-align" value="right"><v-icon name="fa-align-right" /></button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="ql-link"><v-icon name="fa-link" /></button>
+                            <button class="ql-image"><v-icon name="fa-image" /></button>
                         </div>
                         <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
                             <button 
@@ -61,7 +65,7 @@
             <div class="flex justify-start">
                 <div class="dropdown">
                     <div tabindex="0" role="button" class="btn btn-sm m-1">
-                        <v-icon name="fa-tag"/> Tags
+                        <v-icon name="fa-tag"/> {{ $t('note_detail.labels.tags') }}
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li v-for="tag in tags" :key="tag.id">
@@ -72,9 +76,9 @@
                     </ul>
                 </div>
                 <div class="flex gap-2 items-center ms-4">
-                    <span v-for="tag in form.tags" class="relative text-gray-400 cursor-pointer flex gap-1 bg-gray-100 rounded-full p-1">
+                    <span v-for="tag in form.tags" class="relative text-base-content cursor-pointer flex gap-1 bg-base-300 rounded-full px-2 py-1">
                         # {{ tag.name }}
-                        <span class="bg-gray-100 hover:bg-gray-200 transition-all w-6 h-6 rounded-full flex justify-center items-center">
+                        <span class="hover:bg-gray-200 transition-all w-6 h-6 rounded-full flex justify-center items-center">
                             <v-icon name="fa-times" @click="form.tags = form.tags.filter(t => t.id !== tag.id)" />
                         </span>
                     </span>
@@ -105,7 +109,7 @@
             class="text-gray-500 h-full justify-center gap-8 flex flex-col items-center"
         >
             <not-selected-note-ilustration />
-            Choose a note
+            {{ $t('note_detail.labels.choose_a_note') }}
         </div>
     </div>
 </template>
@@ -118,7 +122,6 @@ import { useMutation } from "@vue/apollo-composable";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
-import { deleteNoteService, getNotesService } from "../../services/notes.service";
 import { confirm, swal } from "../commom/customSwal";
 import { notesAdapter } from "../../adapters/notes.adapter";
 import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
@@ -148,7 +151,7 @@ const {
 
 const state = reactive({
     editorOption: {
-        placeholder: "Write a note...",
+        placeholder: "",
         modules: {
             toolbar: "#toolbar",
             // toolbar: [

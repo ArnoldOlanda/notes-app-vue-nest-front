@@ -9,6 +9,14 @@
                 {{ $t('sidebar.options.settings') }}
             </dropdown-item>
 
+            <dropdown-item icon="fa-info-circle" @click="showAboutModal">
+                {{ $t('settings.about') }}
+            </dropdown-item>
+
+            <dropdown-item icon="fa-shield-alt" @click="showPrivacyPolicyModal">
+                {{ $t('settings.privacy_policy') }}
+            </dropdown-item>
+
             <dropdown-item icon="fa-sign-out-alt" @click="logout">
                 {{ $t('sidebar.options.logout') }}
             </dropdown-item>
@@ -27,7 +35,7 @@
                         <label for="" class=" text-left font-semibold">{{ $t('settings.language') }}:</label>
                         <select 
                             class="select select-bordered" 
-                            :value="currentLocale" 
+                            :value="locale" 
                             @change="changeLocale"
                         >
                             <option disabled selected>Select Language</option>
@@ -44,28 +52,37 @@
                 </button>
             </template>
         </modal>
+
+        <about-modal />
+
+        <privacy-policy-modal />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../../store';
+import { useConfigStore } from '../../store/config/useConfigStore';
 import Dropdown from './Dropdown.vue';
 import DropdownItem from './DropwdownItem.vue';
 import { confirm } from '../commom/customSwal';
 import Modal from '../commom/Modal.vue';
+import AboutModal from './AboutModal.vue';
+import PrivacyPolicyModal from './PrivacyPolicyModal.vue';
 
 const store = useAuthStore();
 const router = useRouter();
+
+const configStore = useConfigStore();
 const { locale }  = useI18n();
 
-const currentLocale = ref(locale.value);
+const {config} = storeToRefs(configStore);
 
 const changeLocale = async ({target}) => {
-    currentLocale.value = target.value;
     locale.value = target.value;
+    configStore.setConfig({language: target.value});
 };
 
 const logout = async () => {
@@ -84,6 +101,14 @@ const logout = async () => {
 
 const showSettingsModal = (e) => {
     document.getElementById("settingsModal")?.showModal();
+};
+
+const showAboutModal = (e) => {
+    document.getElementById("aboutModal")?.showModal();
+};
+
+const showPrivacyPolicyModal = (e) => {
+    document.getElementById("privacyPolicyModal")?.showModal();
 };
 
 </script>
