@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col bg-base-100 p-10 h-full">
+    <div class="flex flex-col bg-base-100 px-6 py-4 h-full">
         <div v-if="selectedNote" class="relative h-full">
             <div>
                 <div class="flex items-center mb-4">
@@ -85,6 +85,7 @@
                 </div>
             </div>
             <quill-editor
+                class="h-[calc(100%-200px)] mt-2"
                 :value="form.description"
                 :options="state.editorOption"
                 :disabled="state.disabled"
