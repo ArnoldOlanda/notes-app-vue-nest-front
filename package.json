@@ -20,6 +20,7 @@
     "axios": "^1.7.6",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
+    "highlight.js": "^11.11.1",
     "jwt-decode": "^4.0.0",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.1.6",

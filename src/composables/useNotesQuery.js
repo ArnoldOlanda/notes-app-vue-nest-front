@@ -51,8 +51,6 @@ export function useNotesQuery(userId) {
         
         // Update filtered notes
         filteredNotes.value = result;
-
-        console.log("Applied filters:", filters, "Results:", filteredNotes.value.length);
     };
 
     const clearFilters = () => {
@@ -67,7 +65,6 @@ export function useNotesQuery(userId) {
     });
 
     watch(notesQuery, (newValue) => {
-        // console.log("Notes query result:", newValue);
         if (newValue?.getNotesByUserId) {
             notes.value = notesAdapter(newValue.getNotesByUserId);
             // Apply filters to the new notes

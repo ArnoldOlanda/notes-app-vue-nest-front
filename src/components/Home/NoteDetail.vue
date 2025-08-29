@@ -21,6 +21,10 @@
                         </div>
 
                         <div class="flex gap-2">
+                            <button class="ql-code-block"><v-icon name="fa-code" /></button>
+                        </div>
+
+                        <div class="flex gap-2">
                             <button class="ql-link"><v-icon name="fa-link" /></button>
                             <button class="ql-list" value="bullet"><v-icon name="fa-list-ul" /></button>
                         </div>
@@ -31,7 +35,6 @@
                             <button class="ql-align" value="right"><v-icon name="fa-align-right" /></button>
                         </div>
                         <div class="flex gap-2">
-                            <button class="ql-link"><v-icon name="fa-link" /></button>
                             <button class="ql-image"><v-icon name="fa-image" /></button>
                         </div>
                         <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
@@ -89,9 +92,6 @@
                 :value="form.description"
                 :options="state.editorOption"
                 :disabled="state.disabled"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
                 @change="onEditorChange($event)"
             />
             <div class="absolute right-0 bottom-0">
@@ -120,6 +120,7 @@ import { nextTick, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor } from "vue3-quill";
 import { useMutation } from "@vue/apollo-composable";
+import hljs from "highlight.js";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
@@ -127,9 +128,10 @@ import { confirm, swal } from "../commom/customSwal";
 import { notesAdapter } from "../../adapters/notes.adapter";
 import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
 import { UPDATE_NOTE_MUTATION } from "../../graphql/mutations/updateNote.mutation";
-
-import "vue3-quill/lib/vue3-quill.css";
 import { DELETE_NOTE_MUTATION } from "../../graphql/mutations/deleteNote.mutation";
+
+import "highlight.js/styles/vs2015.css"; // Tema de highlight.js
+import "vue3-quill/lib/vue3-quill.css";
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
@@ -154,19 +156,22 @@ const state = reactive({
     editorOption: {
         placeholder: "",
         modules: {
+            syntax: {
+                highlight: (text) => hljs.highlightAuto(text).value,
+            },
             toolbar: "#toolbar",
             // toolbar: [
             //     ["bold", "italic", "underline"],
-            //     // ["blockquote", "code-block"],
-            //     // [{ header: 1 }, { header: 2 }],
+            //     ["blockquote", "code-block"],
+            //     [{ header: 1 }, { header: 2 }],
             //     [{ list: "bullet" }],
-            //     // [{ script: "sub" }, { script: "super" }],
-            //     // [{ indent: "-1" }, { indent: "+1" }],
-            //     // [{ direction: "rtl" }],
+            //     [{ script: "sub" }, { script: "super" }],
+            //     [{ indent: "-1" }, { indent: "+1" }],
+            //     [{ direction: "rtl" }],
             //     [{ size: ["small", false, "large", "huge"] }],
-            //     // [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            //     // [{ color: [] }, { background: [] }],
-            //     // [{ font: [] }],
+            //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            //     [{ color: [] }, { background: [] }],
+            //     [{ font: [] }],
             //     [{ align: [] }],
             //     ["clean"],
             //     ["link", "image", "video"],
@@ -325,28 +330,52 @@ const addTag = (tag) => {
     };
     form.tags.push(tag);
 };
-
-const onEditorBlur = (quill) => {
-    //console.log("editor blur!", quill);
-};
-const onEditorFocus = (quill) => {
-    //console.log("editor focus!", quill);
-};
-const onEditorReady = (quill) => {
-    //console.log("editor ready!", quill);
-};
 </script>
 
-<style>
-.ql-stroke {
+<style lang="scss" scoped>
+:deep(.ql-container.ql-snow) {
+    border: none !important;
+    background-color: transparent;
+}
+
+:deep(.ql-toolbar.ql-snow) {
+    border: none !important;
+    padding: 0;
+}
+
+:deep(.ql-stroke) {
     stroke: rgb(157, 159, 167) !important;
 }
 
-.ql-container.ql-snow {
-    border: none !important;
+:deep(.ql-snow.ql-toolbar button:hover),
+:deep(.ql-snow.ql-toolbar button:focus) {
+    color: #3b82f6 !important;
+    
+    .ql-stroke {
+        stroke: #3b82f6 !important;
+    }
 }
 
-#toolbar {
-    border: none !important;
+:deep(.ql-snow.ql-toolbar button.ql-active) {
+    color: #3b82f6 !important;
+    
+    .ql-stroke {
+        stroke: #3b82f6 !important;
+    }
 }
+
+:deep(.ql-editor) {
+    padding: 12px 0;
+    
+    &.ql-blank::before {
+        left: 0;
+        font-style: normal;
+        color: rgb(156 163 175);
+    }
+}
+
+:deep(.ql-syntax) {
+  background-color: #272b35 !important;
+}
+
 </style>
