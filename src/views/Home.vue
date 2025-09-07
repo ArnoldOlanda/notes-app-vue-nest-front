@@ -1,6 +1,6 @@
 <template>
     <div class="flex w-full h-screen bg-pattern" :data-theme="config.theme">
-        <div class="w-full relative h-full flex shadow-2xl overflow-hidden">
+        <div class="w-full relative h-full flex shadow-2xl overflow-auto">
             <Sidebar />
             <NoteList class="w-3/12" />
             <NoteDetail class="flex-1" />

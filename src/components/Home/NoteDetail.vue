@@ -40,7 +40,7 @@
                         <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
                             <button 
                                 class="btn btn-circle btn-soft btn-sm text-red-500"
-                                @click="deleteNote"
+                                @click="handleClickDelete"
                             >
                                 <v-icon name="fa-trash-alt"/>
                             </button>
@@ -88,8 +88,8 @@
                 </div>
             </div>
             <quill-editor
-                class="h-[calc(100%-200px)] mt-2"
-                :value="form.description"
+                class="max-h-[calc(100%-200px)] mt-2"
+                :value="form.description_html"
                 :options="state.editorOption"
                 :disabled="state.disabled"
                 @change="onEditorChange($event)"
@@ -118,20 +118,24 @@
 <script setup>
 import { nextTick, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { quillEditor } from "vue3-quill";
-import { useMutation } from "@vue/apollo-composable";
+import { quillEditor, Quill } from "vue3-quill";
+import BlobFormatter from 'quill-blot-formatter'
+import * as Emoji from 'quill-emoji';
 import hljs from "highlight.js";
+import { useMutation } from "@vue/apollo-composable";
 
 import { useAuthStore, useNotesStore } from "../../store";
 import NotSelectedNoteIlustration from "./NotSelectedNoteIlustration.vue";
-import { confirm, swal } from "../commom/customSwal";
-import { notesAdapter } from "../../adapters/notes.adapter";
+import { swal } from "../commom/customSwal";
 import { CREATE_NOTE_MUTATION } from "../../graphql/mutations/createNote.mutation";
 import { UPDATE_NOTE_MUTATION } from "../../graphql/mutations/updateNote.mutation";
-import { DELETE_NOTE_MUTATION } from "../../graphql/mutations/deleteNote.mutation";
 
-import "highlight.js/styles/vs2015.css"; // Tema de highlight.js
 import "vue3-quill/lib/vue3-quill.css";
+import "highlight.js/styles/vs2015.css"; // Tema de highlight.js
+import "quill-emoji/dist/quill-emoji.css"; // Tema de quill-emoji
+
+Quill.register('modules/blotFormatter', BlobFormatter);
+Quill.register('modules/emoji', Emoji);
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
@@ -147,10 +151,6 @@ const {
     loading: updateNoteLoading 
 } = useMutation(UPDATE_NOTE_MUTATION)
 
-const {
-    mutate: deleteNoteMutation,
-    loading: deleteNoteLoading
-} = useMutation(DELETE_NOTE_MUTATION);
 
 const state = reactive({
     editorOption: {
@@ -176,6 +176,10 @@ const state = reactive({
             //     ["clean"],
             //     ["link", "image", "video"],
             // ],
+            blotFormatter: {},
+            "emoji-toolbar": true,
+            "emoji-textarea": true,
+            "emoji-shortname": true,
         },
         // more options
     },
@@ -183,10 +187,11 @@ const state = reactive({
 });
 
 const form = reactive({
-    title: selectedNote.value?.title,
-    description: selectedNote.value?.description,
-    category: selectedNote.value?.category,
-    tags: selectedNote.value?.tags,
+    title: '',
+    description: '',
+    description_html: '',
+    category: '',
+    tags: '',
 });
 
 const isEditing = ref(false);
@@ -197,13 +202,16 @@ watch(selectedNote, (value) => {
     if(value){
         form.title = value.title;
         form.description = value.description;
+        form.description_html = value.description_html;
         form.category = value.category;
         form.tags = value.tags;
     }
 });
 
 const onEditorChange = ({ quill, html, text }) => {
-    form.description = html;
+    // console.log({ quill, html, text });
+    form.description = text;
+    form.description_html = html;
 };
 
 const handleClickEditTitle = () => {
@@ -232,6 +240,7 @@ const saveNote = async () => {
                 updateNoteInput: {
                     title: form.title,
                     description: form.description,
+                    description_html: form.description_html,
                     categoryId: +form.category,
                     tagIds: form.tags.map(tag => tag.id),
                     date: selectedNote.value.date,
@@ -251,6 +260,7 @@ const saveNote = async () => {
                 createNoteInput: {
                     title: form.title,
                     description: form.description,
+                    description_html: form.description_html,
                     date: new Date().toISOString().split('T')[0],
                     categoryId: +form.category,
                     tagIds: form.tags.map(tag => tag.id)
@@ -282,45 +292,8 @@ const saveNote = async () => {
     }
 }
 
-const deleteNote = async () =>{
-    try {
-        const {isConfirmed} = await confirm({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this note!",
-            icon: "warning",
-            confirmButtonText: "Yes, delete it",
-            cancelButtonText: "No, cancel",
-        })
-        if(!isConfirmed) return;
-        
-        const id = selectedNote.value.id;
-        const result = await deleteNoteMutation({ id });
-
-        // console.log(result);
-        
-        if(result?.data?.deleteNote){
-            swal({
-                title: "Success",
-                text: "Note deleted successfully",
-                icon: "success",
-            });
-        }
-
-        selectedNote.value = null;
-
-        await Promise.all([
-            notesStore.getNotes(),
-            notesStore.refetchNotesCounts()
-        ]);
-
-    } catch (error) {
-        console.log(error);
-        swal({
-            title: "Error",
-            text: "An error occurred while deleting the note",
-            icon: "error",
-        })
-    }
+const handleClickDelete = async () =>{
+    notesStore.deleteNote(selectedNote.value.id);
 }
 
 const addTag = (tag) => {
@@ -376,6 +349,15 @@ const addTag = (tag) => {
 
 :deep(.ql-syntax) {
   background-color: #272b35 !important;
+  font-family: Consolas, Courier, monospace !important;
+}
+
+:deep(.textarea-emoji-control){
+    top: -30px !important;
+}
+
+:deep(#textarea-emoji){
+    top: 0 !important;
 }
 
 </style>

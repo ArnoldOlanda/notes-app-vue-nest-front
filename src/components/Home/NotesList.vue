@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-full w-2/6 flex-col bg-base-200 lg:w-1/4">
-    <div class="my-2">
+  <div class="max-h-full h-full w-2/6 bg-base-200 lg:w-1/4">
+    <div class="h-[30%]">
       <div class="flex w-full items-center justify-between px-8 pt-6">
         <span class="text-2xl font-bold">General</span>
         <div class="tooltip" :data-tip="$t('notes_list.reload')">
@@ -33,7 +33,7 @@
 				<AddNoteButton />
       </div>
     </div>
-    <div class="flex-1 overflow-auto">
+    <div class="h-[70%] overflow-y-auto overflow-x-clip">
       <span v-if="notesLoading"> Loading... </span>
       <NoteItem v-else v-for="note in notes" :key="note.id" :note-data="note" />
     </div>
@@ -65,7 +65,7 @@ const handleClearFilters = () => {
 /* Firefox */
 * {
   scrollbar-width: auto;
-  scrollbar-color: rgb(59 130 246) #ffffff;
+  scrollbar-color: rgb(230, 239, 253) #ffffff;
 }
 
 /* Chrome, Edge, and Safari */
@@ -78,7 +78,7 @@ const handleClearFilters = () => {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(59 130 246);
+  background-color: rgb(230, 239, 253);
   border-radius: 10px;
   border: 3px solid #ffffff;
 }

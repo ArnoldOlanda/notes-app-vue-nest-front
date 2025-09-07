@@ -1,16 +1,25 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
+import { useMutation } from "@vue/apollo-composable";
 import { useAuthStore } from "../auth/useAuthStore";
 import { useCategoriesQuery } from "@/composables/useCategoriesQuery";
 import { useTagsQuery } from "@/composables/useTagsQuery";
 import { useNotesQuery } from "@/composables/useNotesQuery";
 import { useNotesCounts } from "@/composables/useNotesCounts";
+import { DELETE_NOTE_MUTATION } from "../../graphql/mutations/deleteNote.mutation";
+import { confirm, swal } from "../../components/commom/customSwal";
 
 export const useNotesStore = defineStore("notes", () => {
     const authStore = useAuthStore();
     const userId = authStore.authState.user.id;
 
     const { notes, filteredNotes, filters, notesLoading, getNotes, clearFilters } = useNotesQuery(userId);
+
+    const {
+        mutate: deleteNoteMutation,
+        loading: deleteNoteLoading
+    } = useMutation(DELETE_NOTE_MUTATION);
+
     const { tags } = useTagsQuery(userId);
     const { categories } = useCategoriesQuery(userId);
     const { 
@@ -54,8 +63,44 @@ export const useNotesStore = defineStore("notes", () => {
         );
     };
 
-    const refreshNotes = () => {
-        
+    const deleteNote = async (id = 0) =>{
+        try {
+            const {isConfirmed} = await confirm({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this note!",
+                icon: "warning",
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "No, cancel",
+            })
+            if(!isConfirmed) return;
+            
+            const result = await deleteNoteMutation({ id });
+
+            // console.log(result);
+            
+            if(result?.data?.deleteNote){
+                swal({
+                    title: "Success",
+                    text: "Note deleted successfully",
+                    icon: "success",
+                });
+            }
+
+            setSelectedNote(null);
+
+            await Promise.all([
+                getNotes(),
+                refetchNotesCounts()
+            ]);
+
+        } catch (error) {
+            console.log(error);
+            swal({
+                title: "Error",
+                text: "An error occurred while deleting the note",
+                icon: "error",
+            })
+        }
     }
 
     return {
@@ -83,6 +128,7 @@ export const useNotesStore = defineStore("notes", () => {
         filterNotes,
         queryNotes,
         clearFilters,
+        deleteNote,
         setCurrentMode,
     };
 });

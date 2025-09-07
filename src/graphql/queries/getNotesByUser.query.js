@@ -5,6 +5,7 @@ export const GET_NOTES_BY_USER = gql`query GetNotesByUserId($userId: Int!) {
         id
         title
         description
+        description_html
         date
         active
         category {

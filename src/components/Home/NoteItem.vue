@@ -6,7 +6,19 @@
         <div class="flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <div class="text-[12px] text-neutral-400">{{ note.category.name }}</div>
-                <div class="text-[12px] text-neutral-400">{{ new Date(note.date).toLocaleDateString() }}</div>
+                <div class="flex gap-2 items-center">
+                    <div class="text-[12px] text-neutral-400">{{ new Date(note.date).toLocaleDateString() }}</div>
+                    <div>
+                        <Dropdown icon="fa-ellipsis-v" class="text-neutral-400" left bottom>
+                            <dropdown-item 
+                                icon="fa-trash" @click.stop="handleClickDelete(note.id)"
+                                class-name="hover:text-red-500"
+                            >
+                                {{ $t('actions.delete') }}
+                            </dropdown-item>
+                        </Dropdown>
+                    </div>
+                </div>
             </div>
             <!-- Tags as chips -->
             <div v-if="note.tags && note.tags.length" class="flex flex-wrap gap-1 mt-1">
@@ -21,7 +33,13 @@
         </div>
         <div class="flex flex-col items-start text-left mt-1">
             <span class="font-bold">{{ note.title }}</span>
-            <p class="text-sm text-base-content" v-html="note.description.length > 100 ? note.description.slice(0, 100) + '...' : note.description">
+            <p 
+                class="text-sm text-base-content" 
+                v-html="note.description.length > 100 
+                    ? note.description.slice(0, 100) + '...' 
+                    : note.description
+                "
+            >
             </p>
         </div>
     </div>
@@ -30,6 +48,8 @@
 <script setup>
 import { ref } from "vue";
 import { useNotesStore } from "../../store";
+import Dropdown from "../Sidebar/Dropdown.vue";
+import DropdownItem from "../Sidebar/DropwdownItem.vue";
 
 const props = defineProps({
     noteData: {
@@ -50,6 +70,11 @@ const handleClickNote = () => {
     notesStore.setSelectedNote(noteValue);
     notesStore.setCurrentMode("edit");
 };
+
+const handleClickDelete = async (id) =>{
+    notesStore.deleteNote(id);
+}
+
 </script>
 
 <style></style>

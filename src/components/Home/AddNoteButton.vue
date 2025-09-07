@@ -23,6 +23,7 @@ const handleClickAddNote = () => {
   notesStore.setSelectedNote({
     title: t("note_detail.labels.title"),
     description: "",
+    description_html: "",
     category: "1",
     tags: [],
   });

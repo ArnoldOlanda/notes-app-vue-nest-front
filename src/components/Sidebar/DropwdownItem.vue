@@ -1,6 +1,11 @@
 <template>
     <li>
-        <a href="#" @click="$emit('click')" class="text-base-content hover:text-blue-500">
+        <a 
+            href="#" 
+            @click="$emit('click')" 
+            class="text-base-content"
+            :class="[className]"
+        >
             <v-icon 
                 :name="icon" 
                 animation="wrench" 
@@ -17,6 +22,10 @@ const props = defineProps({
     icon: {
         type: String,
         required: true,
+    },
+    className:{
+        type: String,
+        default: 'hover:text-blue-500',
     },
 });
 

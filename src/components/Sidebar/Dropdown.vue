@@ -16,11 +16,11 @@
             @click.stop.prevent
             :class="iconWrapperClassName"
         >
-            <v-icon :name="icon" class="text-white"/>
+            <v-icon :name="icon"/>
         </div>
         <ul 
             tabindex="0"
-            class="dropdown-content z-10 menu bg-base-100 rounded-md p-1 shadow-sm"
+            class="dropdown-content !absolute z-10 menu bg-base-100 rounded-md p-1 shadow-sm"
             :class="className"
         >
             <slot />
