@@ -69,12 +69,12 @@ const handleClickForgotPassword = async () => {
 <template>
   <div class="flex h-screen w-[100%] items-center justify-center">
     <div
-      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-white/30 bg-white bg-opacity-80 p-0 text-primary shadow-lg drop-shadow-xl backdrop-blur-md md:w-[550px] md:p-4"
+      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-base-300 bg-base-100 bg-opacity-80 p-0 text-base-content shadow-lg drop-shadow-xl backdrop-blur-md md:w-[550px] md:p-4"
     >
       <div class="mt-2">
-        <v-icon name="fa-brain" scale="4" />
-        <h4 class="mb-4 font-semibold text-gray-800">Forgot Password</h4>
-        <h4 class="text-sm text-gray-600">
+        <v-icon name="fa-brain" scale="4" class="text-blue-500" />
+        <h4 class="mb-4 font-semibold text-blue-500">Forgot Password</h4>
+        <h4 class="text-sm text-base-content/70">
           Enter your email address and we will send you a link to reset your
           password.
         </h4>

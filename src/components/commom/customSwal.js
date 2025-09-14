@@ -6,8 +6,9 @@ export const swal = ({ title, text, icon = 'info' }) => {
     showConfirmButton: true,
     confirmButtonText: 'Ok',
     customClass: {
-      confirmButton: 'btn btn-primary',
+      confirmButton: 'btn btn-primary text-white',
     },
+    scrollbarPadding: false,
   });
 };
 
@@ -23,12 +24,13 @@ export const confirm = ({
     text: text,
     icon: icon,
     customClass: {
-      confirmButton: 'btn btn-primary',
+      confirmButton: 'btn btn-primary text-white',
       cancelButton: 'btn',
     },
     showCancelButton: true,
     confirmButtonText: confirmButtonText,
     cancelButtonText: cancelButtonText,
+    scrollbarPadding: false,
   });
 };
 

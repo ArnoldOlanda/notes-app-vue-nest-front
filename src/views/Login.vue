@@ -65,13 +65,13 @@ const loginGithub = async () => {
 <template>
   <div class="flex min-h-screen w-[100%] items-center justify-center">
     <div
-      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-white/30 bg-white bg-opacity-80 p-0 text-primary shadow-lg drop-shadow-xl backdrop-blur-md md:w-[350px] md:p-4"
+      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-base-300 bg-base-100 bg-opacity-80 p-0 text-base-content shadow-lg drop-shadow-xl backdrop-blur-md md:w-[450px] md:p-4"
     >
       <div class="mt-2">
-        <v-icon name="fa-brain" scale="3" />
-        <h2 class="text-2xl font-bold">Notes App</h2>
+        <v-icon name="fa-brain" class="text-blue-500" scale="3" />
+        <h2 class="text-2xl font-bold text-blue-500">Notes App</h2>
         <!-- <h3 class="text-xl mt-6 font-bold">Welcome</h3> -->
-        <h4 class="font-semibold text-gray-800">Login to your account</h4>
+        <h4 class="text-base-content/70">Login to your account</h4>
       </div>
       <div class="flex w-full flex-col gap-5 px-5">
         <form
@@ -94,7 +94,7 @@ const loginGithub = async () => {
             :validate="v$.password"
           />
           <div class="text-right text-sm">
-            <router-link :to="{ name: 'forgot-password' }"
+            <router-link :to="{ name: 'forgot-password' }" class="underline text-base-content/60 hover:text-base-content/80"
               >Recovery password</router-link
             >
           </div>
@@ -103,9 +103,9 @@ const loginGithub = async () => {
           <button class="btn btn-primary w-full text-white" form="login-form">
             {{ loginLoading ? "Loading..." : "Login" }}
           </button>
-          <div class="mt-0 text-gray-700">or</div>
+          <div class="mt-0 text-base-content/70">or</div>
           <button
-            class="btn-base btn mb-2 w-full border-[1px] border-blue-400 bg-white"
+            class="btn-base btn mb-2 w-full border-[1px] border-blue-400 bg-base-200 hover:bg-base-300"
             @click="() => loginGoogle()"
           >
             <img src="/google.png" alt="" class="h-auto w-[26px]" />
@@ -124,10 +124,10 @@ const loginGithub = async () => {
             Sign in with GitHub
           </button>
         </div>
-        <span class="mb-4 inline-block text-gray-700">
+        <span class="mb-4 inline-block text-base-content/70">
           Don`t have a account?
           <b>
-            <router-link to="/auth/register" class="text-primary">
+            <router-link to="/auth/register" class="text-blue-500 hover:text-blue-500/80">
               Register
             </router-link>
           </b>

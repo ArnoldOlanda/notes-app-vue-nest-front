@@ -4,15 +4,18 @@ import { email, helpers, minLength, required } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 
 import { useAuthStore } from "../store/auth/useAuthStore";
+import { useConfigStore } from "../store/config/useConfigStore";
 import Input from "../components/Input.vue";
 import { useRouter } from "vue-router";
 import { mixin, swal } from "../components/commom/customSwal";
 import { storeToRefs } from "pinia";
 
 const store = useAuthStore();
+const configStore = useConfigStore();
 const router = useRouter();
 const { register } = store;
 const { authState } = storeToRefs(store);
+const { config } = storeToRefs(configStore);
 const formData = reactive({
   name: "",
   email: "",
@@ -59,13 +62,14 @@ const handleClickRegiser = async () => {
 };
 </script>
 <template>
-  <div class="flex h-screen w-[100%] items-center justify-center">
+  <div class="flex h-screen w-[100%] items-center justify-center" :data-theme="config.theme">
     <div
-      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-white/30 bg-white bg-opacity-60 p-0 text-primary shadow-lg drop-shadow-xl md:w-[350px] md:p-4"
+      class="container flex w-[90%] flex-col items-center justify-around gap-3 rounded-lg border-2 border-base-300 bg-base-100 bg-opacity-60 p-0 text-base-content shadow-lg drop-shadow-xl md:w-[450px] md:p-4"
     >
       <div class="mt-2">
-        <h3 class="mt-6 text-xl text-primary"><b>Welcome</b></h3>
-        <h4 class="text-gray-600">Create an account</h4>
+        <v-icon name="fa-brain" class="text-blue-500" scale="3" />
+        <h2 class="text-2xl font-bold text-blue-500">Notes App</h2>
+        <h4 class="text-base-content/70">Create an account</h4>
       </div>
       <div class="flex w-full flex-col gap-1 px-4">
         <Input
@@ -93,10 +97,10 @@ const handleClickRegiser = async () => {
           {{ authState.isLoading ? "Loading..." : "Register" }}
         </button>
       </div>
-      <span class="mb-4 inline-block text-gray-800">
+      <span class="mb-4 inline-block text-base-content/80">
         Already have a account?
         <b>
-          <router-link to="/auth/login" class="text-primary">
+          <router-link to="/auth/login" class="text-blue-500 hover:text-blue-500/80">
             Login
           </router-link>
         </b>

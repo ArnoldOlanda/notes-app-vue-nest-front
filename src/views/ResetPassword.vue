@@ -1,10 +1,9 @@
 <script setup>
 import { onMounted, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
 import { OhVueIcon as vIcon } from "oh-vue-icons";
 import { useVuelidate } from "@vuelidate/core";
-import { email, helpers, minLength, required } from "@vuelidate/validators";
+import { helpers, minLength, required } from "@vuelidate/validators";
 import { useMutation } from "@vue/apollo-composable";
 
 import { useAuthStore } from "../store";
@@ -76,15 +75,15 @@ onMounted(()=>{
 <template>
     <div class="w-[100%] h-screen flex justify-center items-center">
         <div
-            class="container w-[90%] md:w-[550px] border-2 bg-white bg-opacity-80 border-white/30 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-primary"
+            class="container w-[90%] md:w-[550px] border-2 bg-base-100 bg-opacity-80 border-base-300 shadow-lg backdrop-blur-md drop-shadow-xl rounded-lg p-0 md:p-4 flex gap-3 flex-col items-center justify-around text-base-content"
         >
             <div class="mt-2">
-                <v-icon name="fa-brain" scale="4" />
-                <h4 class="text-gray-800 font-semibold mb-4">
-                    Forgot Password
+                <v-icon name="fa-brain" scale="4" class="text-blue-500" />
+                <h4 class="text-blue-500 font-semibold mb-4">
+                    Reset Password
                 </h4>
-                <h4 class="text-gray-600 text-sm">
-                    Enter your email address and we will send you a link to reset your password.
+                <h4 class="text-base-content/70 text-sm">
+                    Enter your new password below.
                 </h4>
             </div>
             <div class="flex flex-col w-full gap-5 px-5">

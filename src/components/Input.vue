@@ -2,15 +2,14 @@
     <div class="relative mb-2">
         <div 
             class="text-left"
-            :class="validate ? (validate.$error ? 'text-red-500' : 'text-primary') : 'text-gray-600'"
+            :class="validate ? (validate.$error ? 'text-red-500' : 'text-base-content/70') : 'text-base-content/70'"
         >
             {{ label }}
         </div>
         <input
-            class="p-2 px-4 h-[50px] input input-bordered border-blue-400 input-primary w-full text-gray-800"
+            class="p-2 px-4 h-[50px] input input-bordered border-blue-400 input-primary w-full text-base-content/90"
             :class="validate ? (validate.$error ? 'border-red-500' : 'border-primary') : ''"
             :type="!showPassword ? inputType : 'text'"
-            :placeholder="placeholder"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
             data-testid="input"
@@ -25,13 +24,13 @@
                 v-if="!showPassword"
                 name="fa-eye"
                 scale="1.5"
-                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-primary'"
+                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-base-content/70'"
             />
             <v-icon 
                 v-else 
                 name="fa-eye-slash" 
                 scale="1.5" 
-                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-primary'"
+                :class="validate && validate.$errors.length ? 'text-red-500' : 'text-base-content/70'"
             />
         </div>
         <div v-if="validate" class="text-left">
