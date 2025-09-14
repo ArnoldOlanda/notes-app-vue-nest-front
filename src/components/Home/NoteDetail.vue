@@ -133,6 +133,7 @@ import { UPDATE_NOTE_MUTATION } from "../../graphql/mutations/updateNote.mutatio
 import "vue3-quill/lib/vue3-quill.css";
 import "highlight.js/styles/vs2015.css"; // Tema de highlight.js
 import "quill-emoji/dist/quill-emoji.css"; // Tema de quill-emoji
+import { GET_NOTES_BY_USER } from "../../graphql/queries/getNotesByUser.query";
 
 Quill.register('modules/blotFormatter', BlobFormatter);
 Quill.register('modules/emoji', Emoji);
@@ -141,15 +142,12 @@ const notesStore = useNotesStore();
 const authStore = useAuthStore();
 const { selectedNote, currentMode, tags, categories } = storeToRefs(notesStore);
 
-const { 
-    mutate: createNoteMutation, 
-    loading: createNoteLoading 
-} = useMutation(CREATE_NOTE_MUTATION)
+const { mutate: createNoteMutation } = useMutation(CREATE_NOTE_MUTATION)
 
-const { 
-    mutate: updateNoteMutation, 
-    loading: updateNoteLoading 
-} = useMutation(UPDATE_NOTE_MUTATION)
+const { mutate: updateNoteMutation } = useMutation(UPDATE_NOTE_MUTATION,{
+    refetchQueries: [GET_NOTES_BY_USER],
+    awaitRefetchQueries: true
+})
 
 
 const state = reactive({
@@ -267,6 +265,9 @@ const saveNote = async () => {
                 }
             })
 
+            //Only refetch counts after creating a new note
+            await notesStore.refetchNotesCounts()
+
             if(result?.data?.createNote){
                 swal({
                     title: "Success",
@@ -276,10 +277,10 @@ const saveNote = async () => {
             }
         }
         notesStore.setLoading(true);
-        await Promise.all([
-            notesStore.getNotes(),
-            notesStore.refetchNotesCounts()
-        ])
+        
+        //Update notes
+        await notesStore.getNotes();
+        
         notesStore.setSelectedNote(null);
 
     } catch (error) {
