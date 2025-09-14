@@ -10,7 +10,17 @@ export default defineConfig({
     ],
     optimizeDeps: {
         exclude: ["oh-vue-icons/icons"],
-        include: ["quill"],
+        include: [
+            'quill',
+            'quill-emoji',
+            'quill-blot-formatter',
+            'vue3-quill'
+        ]
+    },
+    build: {
+        commonjsOptions: {
+            transformMixedEsModules: true,
+        },
     },
     resolve: {
         alias: {

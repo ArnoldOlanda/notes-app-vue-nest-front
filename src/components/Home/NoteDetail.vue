@@ -119,8 +119,10 @@
 import { nextTick, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor, Quill } from "vue3-quill";
-import BlobFormatter from 'quill-blot-formatter'
-import * as Emoji from 'quill-emoji';
+// import BlobFormatter from 'quill-blot-formatter'
+import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter';
+import { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } from 'quill-emoji';
+
 import hljs from "highlight.js";
 import { useMutation } from "@vue/apollo-composable";
 
@@ -135,8 +137,16 @@ import "highlight.js/styles/vs2015.css"; // Tema de highlight.js
 import "quill-emoji/dist/quill-emoji.css"; // Tema de quill-emoji
 import { GET_NOTES_BY_USER } from "../../graphql/queries/getNotesByUser.query";
 
-Quill.register('modules/blotFormatter', BlobFormatter);
-Quill.register('modules/emoji', Emoji);
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register(
+  {
+    'formats/emoji': EmojiBlot,
+    'modules/emoji-toolbar': ToolbarEmoji,
+    'modules/emoji-textarea': TextAreaEmoji,
+    'modules/emoji-shortname': ShortNameEmoji,
+  },
+  true
+);
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
@@ -174,7 +184,7 @@ const state = reactive({
             //     ["clean"],
             //     ["link", "image", "video"],
             // ],
-            blotFormatter: {},
+            // blotFormatter: {},
             "emoji-toolbar": true,
             "emoji-textarea": true,
             "emoji-shortname": true,
