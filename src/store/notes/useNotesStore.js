@@ -20,8 +20,8 @@ export const useNotesStore = defineStore("notes", () => {
         loading: deleteNoteLoading
     } = useMutation(DELETE_NOTE_MUTATION);
 
-    const { tags } = useTagsQuery(userId);
-    const { categories } = useCategoriesQuery(userId);
+    const { tags, reloadTags } = useTagsQuery(userId);
+    const { categories, reloadCategories } = useCategoriesQuery(userId);
     const { 
         notesCategoriesWithCount, 
         notesTagsWithCount,
@@ -122,6 +122,8 @@ export const useNotesStore = defineStore("notes", () => {
         setLoading,
         getNotes,
         refetchNotesCounts,
+        reloadCategories,
+        reloadTags,
         setNotesCategoriesWithCount,
         setNotesTagsWithCount,
         setSelectedNote,

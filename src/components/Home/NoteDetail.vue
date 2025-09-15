@@ -176,7 +176,7 @@ const state = reactive({
             //     ["clean"],
             //     ["link", "image", "video"],
             // ],
-            // blotFormatter: {},
+            blotFormatter: {},
             "emoji-toolbar": true,
             "emoji-textarea": true,
             "emoji-shortname": true,

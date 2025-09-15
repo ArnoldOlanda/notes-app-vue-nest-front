@@ -116,7 +116,9 @@ const handleSubmit  = async () => {
         else await updateCategory();
 
         notesStore.refetchNotesCounts();
+        notesStore.reloadCategories(authState.value.user.id);
 
+        mode.value = "create";
         idCategory.value = null;
         newCategoryName.value = ""; // Clear the input
         document.getElementById("categoriesModal")?.close();
@@ -197,6 +199,7 @@ const handleDeleteCategory = async (id) => {
                 icon: "success",
             });
             notesStore.refetchNotesCounts();
+            notesStore.reloadCategories(authState.value.user.id);
         }
     } catch (error) {
         console.log(error);

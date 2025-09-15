@@ -110,7 +110,9 @@ const handleSubmit = async () => {
         else await updateTag();
 
         notesStore.refetchNotesCounts();
+        notesStore.reloadTags(authState.value.user.id);
 
+        mode.value = "create";
         idTag.value = null;
         newTagName.value = ""; // Clear the input
         document.getElementById("tagsModal")?.close();
@@ -190,6 +192,7 @@ const handleDeleteTag = async (id) => {
                 icon: "success",
             });
             notesStore.refetchNotesCounts();
+            notesStore.reloadTags(authState.value.user.id);
         }
     } catch (error) {
         console.log(error);
