@@ -8,6 +8,7 @@ export const notesApi = axios.create({
         'Content-Type': 'application/json',
     },
     withCredentials: true, //Para que las cookies se envien en cada peticion
+    credentials: 'include', // Para que las cookies se envíen en cada peticion
 });
 
 notesApi.interceptors.request.use(
