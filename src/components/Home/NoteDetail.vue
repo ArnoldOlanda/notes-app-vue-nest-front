@@ -121,7 +121,7 @@ import { storeToRefs } from "pinia";
 import { quillEditor, Quill } from "vue3-quill";
 // import BlobFormatter from 'quill-blot-formatter'
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter';
-import { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } from 'quill-emoji';
+import * as Emoji from 'quill-emoji';
 
 import hljs from "highlight.js";
 import { useMutation } from "@vue/apollo-composable";
@@ -138,15 +138,7 @@ import "quill-emoji/dist/quill-emoji.css"; // Tema de quill-emoji
 import { GET_NOTES_BY_USER } from "../../graphql/queries/getNotesByUser.query";
 
 Quill.register('modules/blotFormatter', BlotFormatter);
-Quill.register(
-  {
-    'formats/emoji': EmojiBlot,
-    'modules/emoji-toolbar': ToolbarEmoji,
-    'modules/emoji-textarea': TextAreaEmoji,
-    'modules/emoji-shortname': ShortNameEmoji,
-  },
-  true
-);
+Quill.register('modules/emoji', Emoji);
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
