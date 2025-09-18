@@ -13,7 +13,7 @@ export const useNotesStore = defineStore("notes", () => {
     const authStore = useAuthStore();
     const userId = authStore.authState.user.id;
 
-    const { notes, filteredNotes, filters, notesLoading, getNotes, clearFilters } = useNotesQuery(userId);
+    const { notes, filteredNotes, filters, notesLoading, getNotes, clearFilters, getTrashedNotes } = useNotesQuery(userId);
 
     const {
         mutate: deleteNoteMutation,
@@ -74,7 +74,7 @@ export const useNotesStore = defineStore("notes", () => {
             })
             if(!isConfirmed) return;
             
-            const result = await deleteNoteMutation({ id });
+            const result = await deleteNoteMutation({ id, type: 'hard' });
 
             // console.log(result);
             
@@ -103,6 +103,44 @@ export const useNotesStore = defineStore("notes", () => {
         }
     }
 
+    const moveToTrash = async (id) => {
+        try {
+            const {isConfirmed} = await confirm({
+                title: "Are you sure?",
+                text: "This note will be moved to the trash.",
+                icon: "warning",
+                confirmButtonText: "Yes, move to trash",
+                cancelButtonText: "No, cancel",
+            })
+            if(!isConfirmed) return;
+            
+            const result = await deleteNoteMutation({ id });
+
+            
+            if(result?.data?.deleteNote){
+                swal({
+                    title: "Success",
+                    text: "Note moved to trash successfully",
+                    icon: "success",
+                });
+            }
+
+            setSelectedNote(null);
+
+            await Promise.all([
+                getNotes(),
+                refetchNotesCounts()
+            ]);
+        } catch (error) {
+            console.log(error);
+            swal({
+                title: "Error",
+                text: "An error occurred, contact the administrator",
+                icon: "error",
+            })
+        }
+    }
+
     return {
         //State
         notes,
@@ -121,6 +159,7 @@ export const useNotesStore = defineStore("notes", () => {
         //Actions
         setLoading,
         getNotes,
+        getTrashedNotes,
         refetchNotesCounts,
         reloadCategories,
         reloadTags,
@@ -131,6 +170,7 @@ export const useNotesStore = defineStore("notes", () => {
         queryNotes,
         clearFilters,
         deleteNote,
+        moveToTrash,
         setCurrentMode,
     };
 });

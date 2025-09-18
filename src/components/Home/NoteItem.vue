@@ -72,7 +72,7 @@ const handleClickNote = () => {
 };
 
 const handleClickDelete = async (id) =>{
-    notesStore.deleteNote(id);
+    notesStore.moveToTrash(id);
 }
 
 </script>

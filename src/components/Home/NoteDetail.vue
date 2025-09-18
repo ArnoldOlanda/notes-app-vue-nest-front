@@ -196,7 +196,6 @@ const form = reactive({
 
 const isEditing = ref(false);
 const inputNoteTitleRef = ref(null);
-const isInputTagOpen = ref(false);
 
 watch(selectedNote, (value) => {
     if(value){
@@ -296,7 +295,7 @@ const saveNote = async () => {
 }
 
 const handleClickDelete = async () =>{
-    notesStore.deleteNote(selectedNote.value.id);
+    notesStore.moveToTrash(selectedNote.value.id);
 }
 
 const addTag = (tag) => {

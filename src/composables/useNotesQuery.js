@@ -22,6 +22,10 @@ export function useNotesQuery(userId) {
         await refetch({userId});
     };
 
+    const getTrashedNotes = async () => {
+        await refetch({userId, active: '0'});
+    }
+
     const applyFilters = () => {
         if (!notes.value || !notes.value.length) {
             filteredNotes.value = [];
@@ -66,6 +70,8 @@ export function useNotesQuery(userId) {
 
     watch(notesQuery, (newValue) => {
         if (newValue?.getNotesByUserId) {
+            console.log("Fetched notes:", newValue.getNotesByUserId);
+            
             notes.value = notesAdapter(newValue.getNotesByUserId);
             // Apply filters to the new notes
             applyFilters();
@@ -84,6 +90,7 @@ export function useNotesQuery(userId) {
         notesError,
 
         getNotes,
+        getTrashedNotes,
         clearFilters,
     };
 }

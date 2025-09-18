@@ -5,7 +5,10 @@
             <div class="w-full">                
                 <category-menu />
                 <tag-menu />
-                <menu-item :label="$t('sidebar.menus.trash')"></menu-item>
+                <div class="flex justify-between px-10 py-2 cursor-pointer" @click="handleGetTrashedNotes">
+                    <span class="font-semibold">{{ $t('sidebar.menus.trash') }}</span>
+                    <v-icon name="fa-trash" class="mr-2" />
+                </div>
             </div>
         </div>
         <sidebar-footer />
@@ -18,6 +21,13 @@ import MenuItem from "./MenuItem.vue";
 import TagMenu from "../Sidebar/TagMenu.vue";
 import SidebarHeader from "../Sidebar/SidebarHeader.vue";
 import SidebarFooter from "../Sidebar/SidebarFooter.vue";
+import { useNotesStore } from "../../store";
+
+const notesStore = useNotesStore();
+
+const handleGetTrashedNotes = async () => {
+    await notesStore.getTrashedNotes();
+}
 
 </script>
 
