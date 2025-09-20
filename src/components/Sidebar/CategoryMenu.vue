@@ -32,7 +32,7 @@
             <div 
                 v-for="category in notesCategoriesWithCount" 
                 :key="category.id" 
-                @click="filters.category = category.id"
+                @click="handleClickCategory(category.id)"
                 class="pl-10 pr-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-primary-hover cursor-pointer"
                 :class="{
                     'bg-primary-active': filters.category === category.id,
@@ -86,7 +86,7 @@ const notesStore = useNotesStore();
 const {t} = useI18n();
 
 const { authState } = storeToRefs(store);
-const { notesCategoriesWithCount, filters } = storeToRefs(notesStore);
+const { notesCategoriesWithCount, filters, showingTrashedNotes } = storeToRefs(notesStore);
 
 const mode = ref("create"); // create, update
 const idCategory = ref(null);
@@ -100,6 +100,14 @@ const { mutate: deleteCategoryMutation } = useMutation(DELETE_CATEGORY_MUTATION)
 const showCategoriesModal = (e) => {
     document.getElementById("categoriesModal")?.showModal();
 };
+
+const handleClickCategory = async (id) =>{
+    filters.value.category = id;
+    if(showingTrashedNotes.value){
+        await notesStore.getNotes(); // Obtener las notas activas
+        showingTrashedNotes.value = false;
+    }
+}
 
 const handleSubmit  = async () => {
     try {

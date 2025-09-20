@@ -72,7 +72,12 @@ const handleClickNote = () => {
 };
 
 const handleClickDelete = async (id) =>{
-    notesStore.moveToTrash(id);
+    if(!id) return;
+    if(note.value.active){
+        await notesStore.moveToTrash(id); // Mover a la papelera
+    }else{
+        await notesStore.deleteNote(id); // Eliminar permanentemente
+    }
 }
 
 </script>

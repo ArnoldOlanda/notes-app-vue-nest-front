@@ -28,7 +28,7 @@
             </dialog>
         </template>
         <template #content>
-            <div v-for="tag in notesTagsWithCount" :key="tag.id" @click="filters.tag = tag.id"
+            <div v-for="tag in notesTagsWithCount" :key="tag.id" @click="handleClickTag(tag.id)"
                 class="pl-10 px-4 py-3 w-full text-blue-200 flex justify-between group hover:bg-primary-hover cursor-pointer"
                 :class="{ 'bg-primary-active': filters.tag === tag.id }">
                 <span class="text-left">{{ tag.name }} </span>
@@ -81,7 +81,7 @@ const notesStore = useNotesStore();
 const { t } = useI18n();
 
 const { authState } = storeToRefs(store);
-const { notesTagsWithCount, filters } = storeToRefs(notesStore);
+const { notesTagsWithCount, filters, showingTrashedNotes } = storeToRefs(notesStore);
 
 const mode = ref("create"); // create, update
 const idTag = ref(null);
@@ -94,6 +94,14 @@ const { mutate: deleteTagMutation } = useMutation(DELETE_TAG_MUTATION);
 const showTagsModal = (e) => {
     document.getElementById("tagsModal")?.showModal();
 };
+
+const handleClickTag = async (id) => {
+    filters.value.tag = id;
+    if(showingTrashedNotes.value){
+        await notesStore.getNotes();
+        showingTrashedNotes.value = false;
+    }
+}
 
 const handleSubmit = async () => {
     try {

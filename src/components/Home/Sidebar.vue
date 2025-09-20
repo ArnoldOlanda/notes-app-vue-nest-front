@@ -26,6 +26,7 @@ import { useNotesStore } from "../../store";
 const notesStore = useNotesStore();
 
 const handleGetTrashedNotes = async () => {
+    notesStore.setShowingTrashedNotes(true);
     await notesStore.getTrashedNotes();
 }
 

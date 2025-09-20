@@ -19,10 +19,11 @@ export function useNotesQuery(userId) {
     } = useQuery(GET_NOTES_BY_USER, () => ({ userId }));
 
     const getNotes = async () => {
-        await refetch({userId});
+        await refetch({userId, active: '1'});
     };
 
     const getTrashedNotes = async () => {
+        clearFilters();
         await refetch({userId, active: '0'});
     }
 
@@ -70,8 +71,7 @@ export function useNotesQuery(userId) {
 
     watch(notesQuery, (newValue) => {
         if (newValue?.getNotesByUserId) {
-            console.log("Fetched notes:", newValue.getNotesByUserId);
-            
+            console.log("Fetched new notes...")
             notes.value = notesAdapter(newValue.getNotesByUserId);
             // Apply filters to the new notes
             applyFilters();

@@ -1,27 +1,27 @@
 <template>
-  <div class="max-h-full h-full w-2/6 bg-base-200 lg:w-1/4">
+  <div class="h-full max-h-full w-2/6 bg-base-200 lg:w-1/4">
     <div class="h-[30%]">
       <div class="flex w-full items-center justify-between px-8 pt-6">
-        <span class="text-2xl font-bold">General</span>
+        <span class="text-2xl font-bold">{{ selectedCategoryName }}</span>
         <div class="tooltip" :data-tip="$t('notes_list.reload')">
-          <v-icon 
-            name="fa-retweet" 
-            scale="1.5" 
-            class="text-gray-400" 
-            @click="handleClickRefreshNotes" 
+          <v-icon
+            name="fa-retweet"
+            scale="1.5"
+            class="text-gray-400"
+            @click="handleClickRefreshNotes"
           />
         </div>
       </div>
       <div class="flex w-full justify-between px-8 pt-4 text-gray-400">
         <span>
-          {{ $t('notes_list.note', notes.length, { count: notes.length }) }}
+          {{ $t("notes_list.note", notes.length, { count: notes.length }) }}
         </span>
         <div class="">
           <div class="tooltip" :data-tip="$t('notes_list.clear_filters')">
-            <v-icon 
-              name="fa-filter" 
-              @click="handleClearFilters" 
-              class="cursor-pointer" 
+            <v-icon
+              name="fa-filter"
+              @click="handleClearFilters"
+              class="cursor-pointer"
             />
           </div>
           <!-- <v-icon name="fa-tag" />
@@ -29,8 +29,8 @@
         </div>
       </div>
       <div class="my-2 flex w-full flex-col gap-3">
-				<SearchBox />
-				<AddNoteButton />
+        <SearchBox />
+        <AddNoteButton />
       </div>
     </div>
     <div class="h-[70%] overflow-y-auto overflow-x-clip">
@@ -48,16 +48,19 @@ import SearchBox from "./SearchBox.vue";
 import AddNoteButton from "./AddNoteButton.vue";
 
 const notesStore = useNotesStore();
-const { filteredNotes: notes, notesLoading } = storeToRefs(notesStore);
+const {
+  filteredNotes: notes,
+  notesLoading,
+  selectedCategoryName,
+} = storeToRefs(notesStore);
 
 const handleClickRefreshNotes = async () => {
-	await notesStore.getNotes();
-}
+  await notesStore.getNotes();
+};
 
 const handleClearFilters = () => {
-	notesStore.clearFilters();
-}
-
+  notesStore.clearFilters();
+};
 </script>
 
 <style scoped>

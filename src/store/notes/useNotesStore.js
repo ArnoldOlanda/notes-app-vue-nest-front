@@ -15,10 +15,7 @@ export const useNotesStore = defineStore("notes", () => {
 
     const { notes, filteredNotes, filters, notesLoading, getNotes, clearFilters, getTrashedNotes } = useNotesQuery(userId);
 
-    const {
-        mutate: deleteNoteMutation,
-        loading: deleteNoteLoading
-    } = useMutation(DELETE_NOTE_MUTATION);
+    const { mutate: deleteNoteMutation } = useMutation(DELETE_NOTE_MUTATION);
 
     const { tags, reloadTags } = useTagsQuery(userId);
     const { categories, reloadCategories } = useCategoriesQuery(userId);
@@ -29,9 +26,16 @@ export const useNotesStore = defineStore("notes", () => {
       } = useNotesCounts(userId);
 
     const selectedNote = ref(null);
+    const selectedCategoryName = computed(() => {
+        if(showingTrashedNotes.value && !filters.category) return 'Trashed';
+        if(!filters.category) return 'All';
+        return categories.value.find(c => c.id === filters.category)?.name || 'All';
+    });
     const isLoading = ref(false);
     const errorMessage = ref("");
     const currentMode = ref("create"); // create | edit
+
+    const showingTrashedNotes = ref(false);
        
     const setLoading = (payload) => {
         isLoading.value = payload;
@@ -51,6 +55,10 @@ export const useNotesStore = defineStore("notes", () => {
 
     const setCurrentMode = (mode) => {
         currentMode.value = mode;
+    }
+
+    const setShowingTrashedNotes = (value) => {
+        showingTrashedNotes.value = value;
     }
 
     const filterNotes = (payload) => {
@@ -149,12 +157,14 @@ export const useNotesStore = defineStore("notes", () => {
         categories,
         notesCategoriesWithCount,
         notesTagsWithCount,
+        selectedCategoryName,
         filters,
         selectedNote,
         filteredNotes,
         isLoading,
         errorMessage,
         currentMode,
+        showingTrashedNotes,
 
         //Actions
         setLoading,
@@ -172,5 +182,6 @@ export const useNotesStore = defineStore("notes", () => {
         deleteNote,
         moveToTrash,
         setCurrentMode,
+        setShowingTrashedNotes,
     };
 });

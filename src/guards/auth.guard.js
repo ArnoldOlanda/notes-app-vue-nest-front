@@ -32,7 +32,7 @@ export const authGuard = async (to, from, next) => {
             // Call REST endpoint to refresh token
             const response = await notesApi.get(`${API_URL}/auth/refresh-token`);
 
-            console.log(response);
+            // console.log(response);
             
             const token = response.data.token;
 
