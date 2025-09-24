@@ -1,7 +1,7 @@
 <template>
     <div class="container bg-primary w-72 text-white flex flex-col">
         <div class="flex-1">
-            <sidebar-header />
+            <sidebar-header @profile-click="showProfileModal" />
             <div class="w-full">                
                 <category-menu />
                 <tag-menu />
@@ -12,6 +12,9 @@
             </div>
         </div>
         <sidebar-footer />
+        
+        <!-- Modal de perfil -->
+        <profile-modal />
     </div>
 </template>
 
@@ -21,6 +24,7 @@ import MenuItem from "./MenuItem.vue";
 import TagMenu from "../Sidebar/TagMenu.vue";
 import SidebarHeader from "../Sidebar/SidebarHeader.vue";
 import SidebarFooter from "../Sidebar/SidebarFooter.vue";
+import ProfileModal from "../Sidebar/ProfileModal.vue";
 import { useNotesStore } from "../../store";
 
 const notesStore = useNotesStore();
@@ -29,6 +33,10 @@ const handleGetTrashedNotes = async () => {
     notesStore.setShowingTrashedNotes(true);
     await notesStore.getTrashedNotes();
 }
+
+const showProfileModal = () => {
+    document.getElementById("profileModal")?.showModal();
+};
 
 </script>
 

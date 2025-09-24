@@ -50,5 +50,12 @@
         "close": "Cerrar",
         "confirm": "Confirmar",
         "ok": "Ok"
+    },
+    "profile": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "user_id": "ID de usuario",
+        "member_since": "Miembro desde",
+        "avatar": "Foto de perfil"
     }
 }

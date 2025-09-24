@@ -50,5 +50,12 @@
         "close": "Close",
         "confirm": "Confirm",
         "ok": "Ok"
+    },
+    "profile": {
+        "name": "Name",
+        "email": "Email",
+        "user_id": "User ID",
+        "member_since": "Member since",
+        "avatar": "Profile picture"
     }
 }
