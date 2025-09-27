@@ -165,14 +165,21 @@ const handleChangePassword = async () => {
 };
 
 const closeModal = () => {
-    document.getElementById('changePasswordModal')?.close();
+    const modalCheckbox = document.getElementById('changePasswordModal');
+    //Toggle checkbox to close modal
+    if (modalCheckbox){
+        modalCheckbox.checked = false;
+    }
 };
 
 const resetForm = () => {
-    form.currentPassword = '';
-    form.newPassword = '';
-    form.confirmPassword = '';
-    Object.keys(errors).forEach(key => errors[key] = '');
+    v$.value.$reset();
+
+    Object.assign(form, {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+    });
     
     // Reset password visibility
     showCurrentPassword.value = false;
