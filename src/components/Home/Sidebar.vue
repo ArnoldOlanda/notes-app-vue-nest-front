@@ -1,7 +1,7 @@
 <template>
     <div class="container bg-primary w-72 text-white flex flex-col">
         <div class="flex-1">
-            <sidebar-header @profile-click="showProfileModal" />
+            <sidebar-header/>
             <div class="w-full">                
                 <category-menu />
                 <tag-menu />
@@ -15,17 +15,32 @@
         
         <!-- Modal de perfil -->
         <profile-modal />
+        
+        <!-- Modal de cambio de contraseña -->
+        <change-password-modal />
+
+        <!-- Modal de configuración -->
+        <settings-modal />
+
+        <!-- Modal de acerca de -->
+        <about-modal />
+
+        <!-- Modal de política de privacidad -->
+        <privacy-policy-modal />
     </div>
 </template>
 
 <script setup>
 import CategoryMenu from "../Sidebar/CategoryMenu.vue";
-import MenuItem from "./MenuItem.vue";
+import { useNotesStore } from "../../store";
 import TagMenu from "../Sidebar/TagMenu.vue";
 import SidebarHeader from "../Sidebar/SidebarHeader.vue";
 import SidebarFooter from "../Sidebar/SidebarFooter.vue";
 import ProfileModal from "../Sidebar/ProfileModal.vue";
-import { useNotesStore } from "../../store";
+import ChangePasswordModal from "../Sidebar/ChangePasswordModal.vue";
+import SettingsModal from "../Sidebar/SettingsModal.vue";
+import AboutModal from "../Sidebar/AboutModal.vue";
+import PrivacyPolicyModal from "../Sidebar/PrivacyPolicyModal.vue";
 
 const notesStore = useNotesStore();
 
@@ -33,10 +48,6 @@ const handleGetTrashedNotes = async () => {
     notesStore.setShowingTrashedNotes(true);
     await notesStore.getTrashedNotes();
 }
-
-const showProfileModal = () => {
-    document.getElementById("profileModal")?.showModal();
-};
 
 </script>
 

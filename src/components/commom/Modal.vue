@@ -1,24 +1,26 @@
 <template>
-    <dialog :id="id" class="modal">
+    <input type="checkbox" :id="id" class="modal-toggle" />
+    <div class="modal" role="dialog">
         <div class="modal-box text-base-content" :class="className">
             <slot name="title"></slot>
             <slot name="content"></slot>
 
             <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    <slot name="actions"></slot>
-                </form>
+                <label 
+                    :for="id" 
+                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >✕ </label>
+                <slot name="actions"></slot>
             </div>
         </div>
-        <form
+        <label
             v-if="closeOnClickOutside"
-            method="dialog" 
+            :for="id"
             class="modal-backdrop"
         >
-            <button>close</button>
-        </form>
-    </dialog>
+            Close
+        </label>
+    </div>
 </template>
 
 <script setup>
@@ -31,6 +33,4 @@ defineProps({
 
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style scoped></style>

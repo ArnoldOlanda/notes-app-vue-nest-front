@@ -205,7 +205,7 @@
 <span class="cstat-no" title="statement not covered" >    // Handle Google OAuth callback</span>
 <span class="cstat-no" title="statement not covered" >    if (to.query.token &amp;&amp; to.query.email) {</span>
 <span class="cstat-no" title="statement not covered" >        const { token, email, id, name, avatar } = to.query;</span>
-<span class="cstat-no" title="statement not covered" >        store.loginWithGoogle(token, {</span>
+<span class="cstat-no" title="statement not covered" >        store.loginWithSocialProvider(token, {</span>
 <span class="cstat-no" title="statement not covered" >            id,</span>
 <span class="cstat-no" title="statement not covered" >            name,</span>
 <span class="cstat-no" title="statement not covered" >            email,</span>

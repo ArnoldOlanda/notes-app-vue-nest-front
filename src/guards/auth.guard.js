@@ -9,11 +9,13 @@ export const authGuard = async (to, from, next) => {
     
     // Handle Google OAuth callback
     if (to.query.token && to.query.email) {
-        const { token, email, id, name, avatar } = to.query;
-        store.loginWithGoogle(token, {
+        const { token, email, id, name, avatar, social_provider = '' } = to.query;
+        
+        store.loginWithSocialProvider(token, {
             id,
             name,
             email,
+            social_provider,
             avatar,
         });
         next();

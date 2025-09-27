@@ -58,15 +58,10 @@ export const useAuthStore = defineStore("auth", () => {
         authState.value.token = ""
     }
 
-    const loginWithGoogle = (token = "", payload = {}) => {
-        console.log({ token, payload });
-        
+    const loginWithSocialProvider = (token = "", payload = {}) => {
         try {
             authState.value.auth = "authenticated";
-            authState.value.user = {
-                ...payload,
-                id: +payload.id,
-            };
+            authState.value.user = {...payload};
             authState.value.token = token;
         } catch (error) {
             throw error;
@@ -87,7 +82,7 @@ export const useAuthStore = defineStore("auth", () => {
 
         //Actions
         login,
-        loginWithGoogle,
+        loginWithSocialProvider,
         register,
         logout,
         setAccesToken,

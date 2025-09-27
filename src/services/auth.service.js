@@ -17,6 +17,15 @@ export const revalidateToken = async (token) => {
     }
 }
 
+export const changePassword = async (changePasswordData) => {
+    try {
+        const { data } = await notesApi.patch("/auth/change-password", changePasswordData);
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 //MOVER A UNA CARPETA DE UTILS
   

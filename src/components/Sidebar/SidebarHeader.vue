@@ -10,12 +10,16 @@
         </div>
         
         <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom>
-            <dropdown-item icon="fa-user" @click="$emit('profile-click')">
-                {{ $t('sidebar.options.profile') }}
+            <dropdown-item icon="fa-user">
+                <label for="profileModal">
+                    {{ $t('sidebar.options.profile') }}
+                </label>
             </dropdown-item>
 
-            <dropdown-item icon="fa-user-lock" @click="">
-                {{ $t('sidebar.options.changePassword') }}
+            <dropdown-item icon="fa-user-lock">
+                <label for="changePasswordModal">
+                    {{ $t('sidebar.options.changePassword') }}
+                </label>
             </dropdown-item>
         </dropdown>
     </div>
@@ -30,6 +34,11 @@ import DropdownItem from "../Sidebar/DropwdownItem.vue";
 
 const store = useAuthStore();
 const { authState } = storeToRefs(store);
+
+const openChangePasswordModal = () => {
+    document.getElementById('changePasswordModal')?.showModal();
+};
+
 </script>
 
 <style lang="scss" scoped>

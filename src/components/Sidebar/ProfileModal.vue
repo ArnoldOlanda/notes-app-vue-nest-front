@@ -14,9 +14,8 @@
                         <img
                             :src="authState.user.avatar || '/default-avatar.png'"
                             :alt="authState.user.name"
-                            class="w-20 h-20 rounded-full object-cover border-4 border-gray-200"
+                            class="w-28 h-28 rounded-full object-cover border-4 border-gray-200"
                         />
-                        <div class="absolute -bottom-1 -right-1 bg-green-500 w-6 h-6 rounded-full border-2 border-white"></div>
                     </div>
                     <h3 class="text-lg font-medium">
                         {{ authState.user.name }}
@@ -57,10 +56,18 @@
                             {{ formatDate(authState.user.createdAt) }}
                         </span>
                     </div>
+
+                    <!-- Social provider (si aplica) -->
+                    <div v-if="authState.user.social_provider" class="text-center text-base-content/30">
+                        <span class="text-sm">
+                            {{ $t('profile.loginWith',{provider:authState.user.social_provider}) }}
+                        </span>
+                    </div>
+
                 </div>
 
                 <!-- Acciones -->
-                <div class="flex flex-col gap-3 mt-6">
+                <div class="flex flex-col gap-3 mt-4">
                     <button 
                         @click="editProfile"
                         class="btn btn-primary btn-sm text-white w-full"
@@ -68,22 +75,14 @@
                         <v-icon name="fa-edit" class="mr-2" />
                         {{ $t('actions.edit') }} {{ $t('sidebar.options.profile') }}
                     </button>
-                    
-                    <button 
-                        @click="changePassword"
-                        class="btn btn-secondary btn-sm w-full"
-                    >
-                        <v-icon name="fa-lock" class="mr-2" />
-                        {{ $t('sidebar.options.changePassword') }}
-                    </button>
                 </div>
             </div>
         </template>
 
         <template #actions>
-            <button class="btn btn-sm">
+            <label for="profileModal" class="btn">
                 {{ $t('actions.close') }}
-            </button>
+            </label>
         </template>
     </modal>
 </template>
@@ -101,13 +100,6 @@ const { authState } = storeToRefs(authStore);
 const editProfile = () => {
     // TODO: Implementar edición de perfil
     console.log('Editar perfil');
-    // Cerrar el modal después de la acción
-    document.getElementById('profileModal')?.close();
-};
-
-const changePassword = () => {
-    // TODO: Implementar cambio de contraseña
-    console.log('Cambiar contraseña');
     // Cerrar el modal después de la acción
     document.getElementById('profileModal')?.close();
 };

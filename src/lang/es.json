@@ -56,6 +56,16 @@
         "email": "Correo electrónico",
         "user_id": "ID de usuario",
         "member_since": "Miembro desde",
-        "avatar": "Foto de perfil"
+        "avatar": "Foto de perfil",
+        "currentPassword": "Contraseña actual",
+        "newPassword": "Nueva contraseña",
+        "confirmPassword": "Confirmar contraseña",
+        "updatePassword": "Actualizar contraseña",
+        "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+        "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+        "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+        "passwordRequirements": "Mínimo 6 caracteres",
+        "loginWith": "Has iniciado sesión con {provider}",
+        "socialLoginPasswordInfo": "Los usuarios que iniciaron sesión con redes sociales no pueden cambiar la contraseña"
     }
 }
