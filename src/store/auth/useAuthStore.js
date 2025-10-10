@@ -1,4 +1,3 @@
-//@ts-check
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { useMutation } from "@vue/apollo-composable";
@@ -60,8 +59,13 @@ export const useAuthStore = defineStore("auth", () => {
 
     const loginWithSocialProvider = (token = "", payload = {}) => {
         try {
+            console.log({payload});
+            
             authState.value.auth = "authenticated";
-            authState.value.user = {...payload};
+            authState.value.user = {
+                ...payload,
+                id: +payload.id,
+            };
             authState.value.token = token;
         } catch (error) {
             throw error;
