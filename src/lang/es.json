@@ -66,6 +66,8 @@
         "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
         "passwordRequirements": "Mínimo 6 caracteres",
         "loginWith": "Has iniciado sesión con {provider}",
-        "socialLoginPasswordInfo": "Los usuarios que iniciaron sesión con redes sociales no pueden cambiar la contraseña"
+        "socialLoginPasswordInfo": "Los usuarios que iniciaron sesión con redes sociales no pueden cambiar la contraseña",
+        "changePhoto": "Cambiar foto",
+        "uploading": "Subiendo..."
     }
 }

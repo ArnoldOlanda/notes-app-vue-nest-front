@@ -16,6 +16,24 @@
                             :alt="authState.user.name"
                             class="w-28 h-28 rounded-full object-cover border-4 border-gray-200"
                         />
+                        <!-- Botón de edición en esquina inferior derecha -->
+                        <button 
+                            @click="openAvatarUpload"
+                            class="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-200 border-2 border-white"
+                            :disabled="uploadingAvatar"
+                            :title="$t('profile.changePhoto')"
+                        >
+                            <v-icon v-if="!uploadingAvatar" name="fa-pen" class="text-xs" />
+                            <span v-if="uploadingAvatar" class="loading loading-spinner loading-xs"></span>
+                        </button>
+                        <!-- Input file oculto -->
+                        <input
+                            ref="avatarInput"
+                            type="file"
+                            accept="image/*"
+                            @change="handleAvatarUpload"
+                            class="hidden"
+                        />
                     </div>
                     <h3 class="text-lg font-medium">
                         {{ authState.user.name }}
@@ -88,13 +106,20 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../../store';
+import { mixin } from '../commom/customSwal';
+import { notesApi } from '../../api';
 import Modal from '../commom/Modal.vue';
 
 // Store
 const authStore = useAuthStore();
 const { authState } = storeToRefs(authStore);
+
+// State
+const avatarInput = ref(null);
+const uploadingAvatar = ref(false);
 
 // Methods
 const editProfile = () => {
@@ -102,6 +127,68 @@ const editProfile = () => {
     console.log('Editar perfil');
     // Cerrar el modal después de la acción
     document.getElementById('profileModal')?.close();
+};
+
+const openAvatarUpload = () => {
+    avatarInput.value?.click();
+};
+
+const handleAvatarUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validar tipo de archivo
+    if (!file.type.startsWith('image/')) {
+        mixin({
+            title: 'Por favor selecciona un archivo de imagen válido',
+            icon: 'error'
+        });
+        return;
+    }
+
+    // Validar tamaño (5MB máximo)
+    if (file.size > 5 * 1024 * 1024) {
+        mixin({
+            title: 'La imagen no puede ser mayor a 5MB',
+            icon: 'error'
+        });
+        return;
+    }
+
+    uploadingAvatar.value = true;
+
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('folder', 'avatars');
+
+        const response = await notesApi.post('/auth/upload-avatar', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        // Actualizar el avatar en el store
+        authStore.updateUserAvatar(response.data.url);
+
+        mixin({
+            title: 'Foto de perfil actualizada correctamente',
+            icon: 'success'
+        });
+
+    } catch (error) {
+        console.error('Error al subir avatar:', error);
+        mixin({
+            title: error.response?.data?.message || 'Error al actualizar la foto de perfil',
+            icon: 'error'
+        });
+    } finally {
+        uploadingAvatar.value = false;
+        // Limpiar el input
+        if (avatarInput.value) {
+            avatarInput.value.value = '';
+        }
+    }
 };
 
 const formatDate = (dateString) => {

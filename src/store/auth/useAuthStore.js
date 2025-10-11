@@ -78,6 +78,12 @@ export const useAuthStore = defineStore("auth", () => {
         authState.value.token = "";
     };
 
+    const updateUserAvatar = (avatarUrl) => {
+        if (authState.value.user) {
+            authState.value.user.avatar = avatarUrl;
+        }
+    };
+
     return {
         //State
         authState,
@@ -91,6 +97,7 @@ export const useAuthStore = defineStore("auth", () => {
         logout,
         setAccesToken,
         setErrorMessage,
-        clearAccesToken
+        clearAccesToken,
+        updateUserAvatar
     };
 });
