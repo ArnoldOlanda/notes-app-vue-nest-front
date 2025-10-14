@@ -6,7 +6,8 @@ Una aplicación moderna de notas desarrollada con Vue.js 3 que permite a los usu
 
 - 🔐 **Autenticación completa**: Login, registro, recuperación de contraseña
 - 🌐 **OAuth**: Integración con Google y GitHub
-- 📝 **Editor rico**: Editor de texto avanzado con sintaxis highlighting
+- � **Gestión de perfil**: Cambio de avatar con upload a Cloudinary
+- �📝 **Editor rico**: Editor de texto avanzado con sintaxis highlighting
 - 🏷️ **Organización**: Categorías y etiquetas para organizar notas
 - 🌙 **Temas**: Soporte para tema claro y oscuro
 - 🌍 **Internacionalización**: Múltiples idiomas (EN/ES)
@@ -75,6 +76,14 @@ yarn install
 cp .env.example .env
 ```
 
+**Variables de entorno requeridas:**
+```env
+VITE_GRAPHQL_URL=http://localhost:3000/graphql
+VITE_API_URL=http://localhost:3000/api/v1
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GITHUB_CLIENT_ID=your_github_client_id
+```
+
 4. **Inicia el servidor de desarrollo**
 ```bash
 npm run dev
@@ -103,15 +112,18 @@ npm run coverage     # Genera reporte de cobertura
 src/
 ├── components/          # Componentes reutilizables
 │   ├── Home/           # Componentes de la página principal
-│   ├── Sidebar/        # Componentes del sidebar
-│   └── common/         # Componentes comunes
+│   ├── Sidebar/        # Componentes del sidebar (incluye ProfileModal)
+│   └── common/         # Componentes comunes (Modal, SweetAlert)
 ├── views/              # Páginas principales
 ├── store/              # Gestión de estado (Pinia)
+│   ├── auth/           # Store de autenticación (incluye avatar)
+│   └── notes/          # Store de notas
 ├── router/             # Configuración de rutas
 ├── composables/        # Composables de Vue
 ├── graphql/           # Queries y mutations GraphQL
 ├── services/          # Servicios y API calls
-├── lang/              # Archivos de idiomas
+├── lang/              # Archivos de idiomas (es.json, en.json)
+├── api/               # Configuración de axios y GraphQL
 └── assets/            # Recursos estáticos
 ```
 
@@ -123,11 +135,37 @@ La aplicación soporta temas claro y oscuro que se sincronizan automáticamente:
 - **Tema oscuro**: Perfecto para trabajo nocturno
 - **Persistencia**: El tema seleccionado se guarda automáticamente
 
+## 👤 Gestión de Perfil
+
+### Avatar de Usuario
+La aplicación incluye un sistema completo de gestión de avatar:
+
+- **UI Mejorada**: Botón de edición discreto en la esquina inferior derecha del avatar
+- **Upload a Cloudinary**: Integración con servicio de almacenamiento en la nube
+- **Validación**: Verificación de tipo y tamaño de archivo (máx. 5MB)
+- **Feedback Visual**: Estados de carga y notificaciones de éxito/error
+- **Persistencia**: Avatar se actualiza automáticamente en toda la aplicación
+
+### Características del ProfileModal
+- **Diseño Responsivo**: Adaptado para todos los dispositivos
+- **Accesibilidad**: Tooltips y estados visuales claros
+- **UX Optimizada**: Transiciones suaves y feedback inmediato
+- **Integración con Store**: Actualización reactiva del estado de autenticación
+
 ## 🌐 Internacionalización
 
 Idiomas soportados:
 - 🇺🇸 Inglés (por defecto)
 - 🇪🇸 Español
+
+### Nuevas Traducciones Agregadas
+```javascript
+// Traducciones para funcionalidad de perfil
+profile: {
+  changePhoto: "Cambiar foto",
+  uploading: "Subiendo..."
+}
+```
 
 ## 🧪 Testing
 
@@ -149,6 +187,20 @@ npm run build
 ```
 
 Los archivos optimizados se generarán en la carpeta `dist/`.
+
+## 🆕 Últimas Actualizaciones
+
+### v2.1.0 - Gestión de Avatar
+- ✨ **Nueva UI de ProfileModal**: Botón de edición elegante en esquina de avatar
+- 🖼️ **Upload de Avatar**: Integración completa con Cloudinary
+- 🔄 **Estado Reactivo**: Actualización automática del avatar en toda la app
+- 🌍 **Traducciones**: Nuevas claves i18n para funcionalidad de perfil
+- ⚡ **Optimizaciones**: Mejoras en UX y feedback visual
+
+### Componentes Modificados
+- `ProfileModal.vue`: UI mejorada con botón de edición
+- `useAuthStore.js`: Método `updateUserAvatar` agregado
+- Archivos de traducción: `es.json` y `en.json` actualizados
 
 ## 🤝 Contribución
 
