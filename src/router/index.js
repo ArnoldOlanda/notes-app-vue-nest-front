@@ -8,6 +8,8 @@ import ResetPassword from "../views/ResetPassword.vue";
 import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import PageNotFound from "../views/404.vue";
+import { notesApi } from "../api";
+import { swal } from "../components/commom/customSwal";
 
 const routes = [
     {
@@ -17,7 +19,27 @@ const routes = [
             { path: "login", name: "login", component: Login },
             { path: "register", name: "register", component: Register },
             { path: "forgot-password", name: "forgot-password", component: ForgotPassword },
-            { path: "reset-password", name: "reset-password", component: ResetPassword },
+            { 
+                path: "reset-password", 
+                name: "reset-password", 
+                component: ResetPassword,
+                beforeEnter: async (to, from, next) => {
+                    try {
+                        const {data} = await notesApi.get(`/auth/validate-reset-token/${to.query?.token || ''}`,)
+                        console.log(data);
+
+                        next();
+                        
+                    } catch (error) {
+                        swal({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error?.response?.data?.message || 'El token no es válido o ha expirado.',
+                        })
+                        next({ name: 'login'});
+                    }
+                } 
+            },
         ],
     },
     {
