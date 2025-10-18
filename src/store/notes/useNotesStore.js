@@ -22,7 +22,8 @@ export const useNotesStore = defineStore("notes", () => {
     const { 
         notesCategoriesWithCount, 
         notesTagsWithCount,
-        refetchNotesCounts 
+        refetchNotesCounts, 
+        error: notesCountsError,
       } = useNotesCounts(userId);
 
     const selectedNote = ref(null);
@@ -165,6 +166,7 @@ export const useNotesStore = defineStore("notes", () => {
         errorMessage,
         currentMode,
         showingTrashedNotes,
+        notesCountsError,
 
         //Actions
         setLoading,

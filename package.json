@@ -14,7 +14,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.4",
+    "@apollo/client": "^3.14.0",
     "@types/js-cookie": "^3.0.6",
     "@vue/apollo-composable": "^4.2.2",
     "@vuelidate/core": "^2.0.3",

@@ -78,9 +78,9 @@ export function useNotesQuery(userId) {
         }
     });
 
-    watch(notesError, (error) => {
-        if (error) console.error("Error fetching notes:", error);
-    });
+    // watch(notesError, (error) => {
+    //     if (error) console.error("Error fetching notes:", error);
+    // });
 
     return {
         notes,

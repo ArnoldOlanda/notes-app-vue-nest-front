@@ -41,8 +41,26 @@ import ChangePasswordModal from "../Sidebar/ChangePasswordModal.vue";
 import SettingsModal from "../Sidebar/SettingsModal.vue";
 import AboutModal from "../Sidebar/AboutModal.vue";
 import PrivacyPolicyModal from "../Sidebar/PrivacyPolicyModal.vue";
+import { storeToRefs } from "pinia";
+import { watch } from "vue";
+import { mixin } from "../commom/customSwal";
 
 const notesStore = useNotesStore();
+const {notesCountsError} = storeToRefs(notesStore);
+
+watch(notesCountsError, (error) => {
+    if (error) {
+        console.log(error.message);
+        const isTooManyRequestsError = error.message.includes('ThrottlerException')
+        
+        if(isTooManyRequestsError){
+            mixin({
+                icon: 'error',
+                title: 'Has realizado demasiadas solicitudes. Por favor, intenta nuevamente en unos segundos.',
+            })
+        }
+    }
+});
 
 const handleGetTrashedNotes = async () => {
     notesStore.setShowingTrashedNotes(true);
