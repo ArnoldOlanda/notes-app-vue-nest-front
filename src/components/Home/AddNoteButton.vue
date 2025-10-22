@@ -1,11 +1,11 @@
 <template>
-  <div class="mx-8">
+  <div class="mx-0 sm:mx-8 flex items-center">
     <button
       class="btn btn-primary btn-sm w-full rounded text-white"
       @click="handleClickAddNote"
     >
-      <v-icon name="fa-plus" />
-      <span class="ml-2">
+      <v-icon name="fa-plus" scale="0.6"/>
+      <span class="ml-1 text-xs sm:text-sm">
         {{ $t("notes_list.add_note") }}
       </span>
     </button>

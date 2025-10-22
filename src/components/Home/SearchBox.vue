@@ -1,11 +1,11 @@
 <template>
   <div
-    class="ml-8 mr-8 flex items-center rounded bg-base-300 pr-2 text-gray-400"
+    class="mx-2 sm:mx-8 flex flex-1 items-center rounded bg-base-300 pr-2 text-gray-400"
   >
     <input
       type="text"
       :placeholder="$t('notes_list.search_notes')"
-      class="flex-1 bg-transparent p-3 outline-none"
+      class="flex-1 bg-transparent p-2 outline-none"
       v-model="query"
     />
     <v-icon name="fa-search"/>
