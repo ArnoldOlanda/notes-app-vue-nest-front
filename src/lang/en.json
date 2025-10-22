@@ -1,4 +1,7 @@
 {
+    "hamburger": {
+        "toggle": "Toggle menu"
+    },
     "sidebar":{
         "menus":{
             "category": "CATEGORIES",

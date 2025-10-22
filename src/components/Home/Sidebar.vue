@@ -1,13 +1,13 @@
 <template>
-    <div class="container bg-primary w-72 text-white flex flex-col">
+    <div class="container bg-primary w-72 text-white flex flex-col h-full">
         <div class="flex-1">
             <sidebar-header/>
             <div class="w-full">                
                 <category-menu />
                 <tag-menu />
-                <div class="flex justify-between px-10 py-2 cursor-pointer" @click="handleGetTrashedNotes">
-                    <span class="font-semibold">{{ $t('sidebar.menus.trash') }}</span>
-                    <v-icon name="fa-trash" class="mr-2" />
+                <div class="flex justify-between px-10 py-2 cursor-pointer hover:bg-primary-focus transition-colors" @click="handleGetTrashedNotes">
+                    <span class="font-semibold text-sm sm:text-base">{{ $t('sidebar.menus.trash') }}</span>
+                    <v-icon name="fa-trash" class="mr-2" scale="0.9" />
                 </div>
             </div>
         </div>

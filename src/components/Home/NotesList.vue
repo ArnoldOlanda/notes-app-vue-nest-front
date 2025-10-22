@@ -1,18 +1,18 @@
 <template>
-  <div class="h-full max-h-full w-2/6 bg-base-200 lg:w-1/4">
-    <div class="h-[30%]">
-      <div class="flex w-full items-center justify-between px-8 pt-6">
-        <span class="text-2xl font-bold">{{ selectedCategoryName }}</span>
+  <div class="h-full flex flex-col max-h-full bg-base-200 w-full sm:w-auto sm:min-w-[320px] sm:max-w-md">
+    <div class="h-auto sm:h-[30%] py-4 sm:py-0">
+      <div class="flex w-full items-center justify-between px-4 sm:px-8 pt-2 sm:pt-6">
+        <span class="text-xl sm:text-2xl font-bold">{{ selectedCategoryName }}</span>
         <div class="tooltip" :data-tip="$t('notes_list.reload')">
           <v-icon
             name="fa-retweet"
-            scale="1.5"
-            class="text-gray-400"
+            scale="1.2"
+            class="text-gray-400 cursor-pointer"
             @click="handleClickRefreshNotes"
           />
         </div>
       </div>
-      <div class="flex w-full justify-between px-8 pt-4 text-gray-400">
+      <div class="flex w-full justify-between px-4 sm:px-8 pt-2 sm:pt-4 text-gray-400 text-sm">
         <span>
           {{ $t("notes_list.note", notes.length, { count: notes.length }) }}
         </span>
@@ -20,6 +20,7 @@
           <div class="tooltip" :data-tip="$t('notes_list.clear_filters')">
             <v-icon
               name="fa-filter"
+              scale="1"
               @click="handleClearFilters"
               class="cursor-pointer"
             />
@@ -28,13 +29,13 @@
           <v-icon name="fa-ellipsis-v" /> -->
         </div>
       </div>
-      <div class="my-2 flex w-full flex-col gap-3">
+      <div class="my-2 flex w-full flex-col gap-2 sm:gap-3 px-2">
         <SearchBox />
         <AddNoteButton />
       </div>
     </div>
-    <div class="h-[70%] overflow-y-auto overflow-x-clip">
-      <span v-if="notesLoading"> Loading... </span>
+    <div class="h-auto max-h-[30vh] sm:max-h-none sm:h-[70%] overflow-y-auto overflow-x-clip">
+      <span v-if="notesLoading" class="px-4"> Loading... </span>
       <NoteItem v-else v-for="note in notes" :key="note.id" :note-data="note" />
     </div>
   </div>

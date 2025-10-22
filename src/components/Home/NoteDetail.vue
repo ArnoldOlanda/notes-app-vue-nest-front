@@ -1,55 +1,55 @@
 <template>
-    <div class="flex flex-col bg-base-100 px-6 py-4 h-full">
+    <div class="flex flex-col bg-base-100 px-3 sm:px-6 py-4 h-full">
         <div v-if="selectedNote" class="relative h-full">
             <div>
-                <div class="flex items-center mb-4">
-                    <select class="select select-bordered select-xs w-36" v-model="form.category">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2">
+                    <select class="select select-bordered select-xs w-full sm:w-36" v-model="form.category">
                         <option :value="category.id" v-for="category in categories" :key="category.id">
                             {{ category.name }}
                         </option>
                     </select>
                     <div
                         id="toolbar"
-                        class="flex gap-5 items-center text-gray-400 w-full h-10"
+                        class="flex flex-wrap gap-2 sm:gap-5 items-center text-gray-400 w-full h-auto sm:h-10"
                     >
                         <!-- <div class="w-[25px] h-[25px] ml-4 bg-lime-400 rounded-full" /> -->
                         
                         <div class="flex gap-2">
-                            <button class="ql-bold"><v-icon name="fa-bold" /></button>
-                            <button class="ql-italic"><v-icon name="fa-italic" /></button>
-                            <button class="ql-underline"><v-icon name="fa-underline" /></button>
+                            <button class="ql-bold"><v-icon name="fa-bold" scale="0.9" /></button>
+                            <button class="ql-italic"><v-icon name="fa-italic" scale="0.9" /></button>
+                            <button class="ql-underline"><v-icon name="fa-underline" scale="0.9" /></button>
                         </div>
 
                         <div class="flex gap-2">
-                            <button class="ql-code-block"><v-icon name="fa-code" /></button>
+                            <button class="ql-code-block"><v-icon name="fa-code" scale="0.9" /></button>
                         </div>
 
                         <div class="flex gap-2">
-                            <button class="ql-link"><v-icon name="fa-link" /></button>
-                            <button class="ql-list" value="bullet"><v-icon name="fa-list-ul" /></button>
+                            <button class="ql-link"><v-icon name="fa-link" scale="0.9" /></button>
+                            <button class="ql-list" value="bullet"><v-icon name="fa-list-ul" scale="0.9" /></button>
                         </div>
 
                         <div class="flex gap-2">
-                            <button class="ql-align"><v-icon name="fa-align-left" /></button>
-                            <button class="ql-align" value="center"><v-icon name="fa-align-center" /></button>
-                            <button class="ql-align" value="right"><v-icon name="fa-align-right" /></button>
+                            <button class="ql-align"><v-icon name="fa-align-left" scale="0.9" /></button>
+                            <button class="ql-align" value="center"><v-icon name="fa-align-center" scale="0.9" /></button>
+                            <button class="ql-align" value="right"><v-icon name="fa-align-right" scale="0.9" /></button>
                         </div>
                         <div class="flex gap-2">
-                            <button class="ql-image"><v-icon name="fa-image" /></button>
+                            <button class="ql-image"><v-icon name="fa-image" scale="0.9" /></button>
                         </div>
                         <div v-show="selectedNote.id" class="tooltip tooltip-bottom" data-tip="Delete note">
                             <button 
                                 class="btn btn-circle btn-soft btn-sm text-red-500"
                                 @click="handleClickDelete"
                             >
-                                <v-icon name="fa-trash-alt"/>
+                                <v-icon name="fa-trash-alt" scale="0.9" />
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="w-full flex justify-start">
                     <h3
-                        class="text-2xl font-bold"
+                        class="text-xl sm:text-2xl font-bold cursor-pointer"
                         @click="handleClickEditTitle"
                         v-show="!isEditing"
                     >
@@ -58,17 +58,17 @@
                     <input
                         v-show="isEditing"
                         ref="inputNoteTitleRef"
-                        class="input text-2xl p-0 text-uppercase font-bold"
+                        class="input text-xl sm:text-2xl p-0 text-uppercase font-bold w-full"
                         type="text"
                         v-model="form.title"
                         @blur="isEditing = false"
                     />
                 </div>
             </div>
-            <div class="flex justify-start">
+            <div class="flex flex-wrap justify-start items-center gap-2">
                 <div class="dropdown">
-                    <div tabindex="0" role="button" class="btn btn-sm m-1">
-                        <v-icon name="fa-tag"/> {{ $t('note_detail.labels.tags') }}
+                    <div tabindex="0" role="button" class="btn btn-sm">
+                        <v-icon name="fa-tag" scale="0.9" /> {{ $t('note_detail.labels.tags') }}
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li v-for="tag in tags" :key="tag.id">
@@ -78,39 +78,39 @@
                         </li>
                     </ul>
                 </div>
-                <div class="flex gap-2 items-center ms-4">
-                    <span v-for="tag in form.tags" class="relative text-base-content cursor-pointer flex gap-1 bg-base-300 rounded-full px-2 py-1">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <span v-for="tag in form.tags" class="relative text-xs sm:text-sm text-base-content cursor-pointer flex gap-1 bg-base-300 rounded-full px-2 py-1">
                         # {{ tag.name }}
-                        <span class="hover:bg-gray-200 transition-all w-6 h-6 rounded-full flex justify-center items-center">
-                            <v-icon name="fa-times" @click="form.tags = form.tags.filter(t => t.id !== tag.id)" />
+                        <span class="hover:bg-gray-200 transition-all w-5 h-5 rounded-full flex justify-center items-center">
+                            <v-icon name="fa-times" scale="0.8" @click="form.tags = form.tags.filter(t => t.id !== tag.id)" />
                         </span>
                     </span>
                 </div>
             </div>
             <quill-editor
-                class="max-h-[calc(100%-200px)] mt-2"
+                class="max-h-[calc(100%-250px)] sm:max-h-[calc(100%-200px)] mt-2"
                 :value="form.description_html"
                 :options="state.editorOption"
                 :disabled="state.disabled"
                 @change="onEditorChange($event)"
             />
-            <div class="absolute right-0 bottom-0">
+            <div class="absolute right-0 bottom-0 sm:right-0 sm:bottom-0 left-0 sm:left-auto flex justify-center sm:justify-end">
                 <button 
-                    class="bg-blue-500 p-2 text-white rounded-md w-40 shadow-lg disabled:bg-blue-200 disabled:shadow-none"
+                    class="bg-blue-500 p-2 text-white rounded-md w-full sm:w-40 shadow-lg disabled:bg-blue-200 disabled:shadow-none text-sm sm:text-base"
                     :disabled="!form.description"
                     @click="saveNote"
                 >
-                    <v-icon name="fa-save" />
+                    <v-icon name="fa-save" scale="0.9" />
                     {{ currentMode === "edit" ? "Update" : "Save" }} note
                 </button>
             </div>
         </div>
         <div
             v-else
-            class="text-gray-500 h-full justify-center gap-8 flex flex-col items-center"
+            class="text-gray-500 h-full justify-center gap-8 flex flex-col items-center px-4"
         >
             <not-selected-note-ilustration />
-            {{ $t('note_detail.labels.choose_a_note') }}
+            <p class="text-center text-sm sm:text-base">{{ $t('note_detail.labels.choose_a_note') }}</p>
         </div>
     </div>
 </template>

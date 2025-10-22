@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between items-center p-10">
+    <div class="flex justify-between items-center p-10 pt-20 sm:pt-10">
         <div class="flex gap-2 items-center">
             <img
                 :src="authState.user.avatar"
@@ -9,7 +9,7 @@
         <span>{{ authState.user.name }}</span>
         </div>
         
-        <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom>
+        <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom left>
             <dropdown-item icon="fa-user">
                 <label for="profileModal">
                     {{ $t('sidebar.options.profile') }}
