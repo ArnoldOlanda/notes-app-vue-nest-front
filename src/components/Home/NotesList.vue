@@ -29,24 +29,33 @@
           <v-icon name="fa-ellipsis-v" /> -->
         </div>
       </div>
-      <div class="my-2 flex w-full sm:flex-col gap-1 sm:gap-3 px-2">
+      <div class="my-2 flex w-full sm:flex-col gap-1 sm:gap-3">
         <SearchBox />
         <AddNoteButton />
       </div>
     </div>
-    <div class="h-auto max-h-[25vh] sm:max-h-none sm:h-[75%] overflow-y-auto overflow-x-clip">
+    <div class="h-[75%] overflow-y-auto overflow-x-clip pb-20 sm:pb-0">
       <span v-if="notesLoading" class="px-4"> Loading... </span>
-      <NoteItem v-else v-for="note in notes" :key="note.id" :note-data="note" />
+      <NoteItem 
+        v-else 
+        v-for="note in notes" 
+        :key="note.id" 
+        :note-data="note"
+        @note-selected="handleNoteSelected"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { defineEmits } from "vue";
 import { storeToRefs } from "pinia";
 import { useNotesStore } from "../../store";
 import NoteItem from "./NoteItem.vue";
 import SearchBox from "./SearchBox.vue";
 import AddNoteButton from "./AddNoteButton.vue";
+
+const emit = defineEmits(['noteSelected']);
 
 const notesStore = useNotesStore();
 const {
@@ -61,6 +70,10 @@ const handleClickRefreshNotes = async () => {
 
 const handleClearFilters = () => {
   notesStore.clearFilters();
+};
+
+const handleNoteSelected = () => {
+  emit('noteSelected');
 };
 </script>
 

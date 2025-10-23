@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col bg-base-100 px-3 sm:px-6 py-4 h-full">
+    <div class="flex flex-col bg-base-100 px-3 sm:px-6 py-4 h-full pt-20 sm:pt-2">
         <div v-if="selectedNote" class="relative h-full">
             <div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2">
@@ -68,7 +68,8 @@
             <div class="flex flex-wrap justify-start items-center gap-2">
                 <div class="dropdown">
                     <div tabindex="0" role="button" class="btn btn-sm">
-                        <v-icon name="fa-tag" scale="0.9" /> {{ $t('note_detail.labels.tags') }}
+                        <v-icon name="fa-tag" scale="0.9" /> 
+                        <!-- {{ $t('note_detail.labels.tags') }} -->
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li v-for="tag in tags" :key="tag.id">
@@ -79,7 +80,7 @@
                     </ul>
                 </div>
                 <div class="flex flex-wrap gap-2 items-center">
-                    <span v-for="tag in form.tags" class="relative text-xs sm:text-sm text-base-content cursor-pointer flex gap-1 bg-base-300 rounded-full px-2 py-1">
+                    <span v-for="tag in form.tags" class="relative text-xs sm:text-sm text-base-content cursor-pointer flex gap-1 bg-base-300 rounded-full px-3 py-1">
                         # {{ tag.name }}
                         <span class="hover:bg-gray-200 transition-all w-5 h-5 rounded-full flex justify-center items-center">
                             <v-icon name="fa-times" scale="0.8" @click="form.tags = form.tags.filter(t => t.id !== tag.id)" />
@@ -94,14 +95,25 @@
                 :disabled="state.disabled"
                 @change="onEditorChange($event)"
             />
-            <div class="absolute right-0 bottom-0 sm:right-0 sm:bottom-0 left-0 sm:left-auto flex justify-center sm:justify-end">
+            <div class="absolute right-0 bottom-0 sm:right-0 sm:bottom-0 left-0 sm:left-auto flex gap-2 justify-center sm:justify-end px-2 sm:px-0">
+                <!-- Botón de retroceso - Solo visible en móvil -->
                 <button 
-                    class="bg-blue-500 p-2 text-white rounded-md w-full sm:w-40 shadow-lg disabled:bg-blue-200 disabled:shadow-none text-sm sm:text-base"
+                    class="sm:hidden bg-gray-600 hover:bg-gray-700 p-2 px-4 text-white rounded-md shadow-lg text-sm flex items-center gap-2 transition-colors"
+                    @click="handleBack"
+                    :aria-label="$t('navigation.back')"
+                >
+                    <v-icon name="fa-arrow-left" scale="0.9" />
+                    <span>{{ $t('navigation.back') }}</span>
+                </button>
+                
+                <!-- Botón de guardar -->
+                <button 
+                    class="bg-blue-500 hover:bg-blue-600 p-2 px-4 text-white rounded-md flex-1 sm:w-auto shadow-lg disabled:bg-blue-200 disabled:shadow-none text-sm sm:text-base transition-colors"
                     :disabled="!form.description"
                     @click="saveNote"
                 >
                     <v-icon name="fa-save" scale="0.9" />
-                    {{ currentMode === "edit" ? "Update" : "Save" }} note
+                    <span class="ml-1">{{ currentMode === "edit" ? "Update" : "Save" }}</span>
                 </button>
             </div>
         </div>
@@ -116,7 +128,7 @@
 </template>
 
 <script setup>
-import { nextTick, reactive, ref, watch } from "vue";
+import { nextTick, reactive, ref, watch, defineEmits } from "vue";
 import { storeToRefs } from "pinia";
 import { quillEditor, Quill } from "vue3-quill";
 // import BlobFormatter from 'quill-blot-formatter'
@@ -139,6 +151,8 @@ import { GET_NOTES_BY_USER } from "../../graphql/queries/getNotesByUser.query";
 
 Quill.register('modules/blotFormatter', BlotFormatter);
 Quill.register('modules/emoji', Emoji);
+
+const emit = defineEmits(['back']);
 
 const notesStore = useNotesStore();
 const authStore = useAuthStore();
@@ -218,6 +232,10 @@ const handleClickEditTitle = () => {
     nextTick(() => {
         inputNoteTitleRef.value.focus();
     });
+};
+
+const handleBack = () => {
+    emit('back');
 };
 
 const saveNote = async () => {

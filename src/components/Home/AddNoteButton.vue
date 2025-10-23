@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-0 sm:mx-8 flex items-center">
+  <div class="mx-0 sm:mx-8 items-center hidden sm:flex">
     <button
       class="btn btn-primary btn-sm w-full rounded text-white"
       @click="handleClickAddNote"

@@ -9,7 +9,7 @@
         <span>{{ authState.user.name }}</span>
         </div>
         
-        <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom left>
+        <dropdown icon="fa-ellipsis-v" class-name="w-48" bottom>
             <dropdown-item icon="fa-user">
                 <label for="profileModal">
                     {{ $t('sidebar.options.profile') }}

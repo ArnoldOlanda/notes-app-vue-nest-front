@@ -1,11 +1,11 @@
 <template>
-    <div class="fixed top-4 left-4 z-50 sm:hidden">
+    <div class="fixed top-4 left-7 z-50 sm:hidden">
         <button 
             @click="toggleSidebar"
-            class="btn btn-circle btn-primary shadow-lg"
+            class="btn btn-circle shadow-lg"
             :aria-label="$t('hamburger.toggle')"
         >
-            <v-icon :name="isOpen ? 'fa-times' : 'fa-bars'" scale="1.2" />
+            <v-icon :name="isOpen ? 'fa-times' : 'fa-bars'" scale="1.1" />
         </button>
     </div>
 </template>
@@ -27,9 +27,3 @@ const toggleSidebar = () => {
 };
 </script>
 
-<style scoped>
-.btn-circle {
-    width: 3rem;
-    height: 3rem;
-}
-</style>

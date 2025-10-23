@@ -2,6 +2,9 @@
     "hamburger": {
         "toggle": "Toggle menu"
     },
+    "navigation": {
+        "back": "Go back"
+    },
     "sidebar":{
         "menus":{
             "category": "CATEGORIES",
